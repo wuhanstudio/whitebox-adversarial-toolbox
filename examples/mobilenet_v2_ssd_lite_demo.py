@@ -1,6 +1,7 @@
 import cv2
 import sys
 from what.models.detection.ssd.mobilenet_v2_ssd_lite import MobileNetV2SSDLite
+from what.models.detection.ssd.utils.box_utils import draw_bounding_boxes
 
 # Capture from camera
 cap = cv2.VideoCapture(0)
@@ -26,23 +27,9 @@ while True:
     image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
 
     # Draw bounding boxes onto the image
-    for i in range(boxes.size(0)):
-        box = boxes[i, :]
-        label = f"{model.class_names[labels[i]]}: {probs[i]:.2f}"
-        print(label)
+    output = draw_bounding_boxes(image, boxes, labels, model.class_names, probs);
 
-        # Draw bounding boxes
-        cv2.rectangle(image, (int(box[0].item()), int(box[1].item())), (int(box[2].item()), int(box[3].item())), (255, 255, 0), 4)
-
-        # Draw labels
-        cv2.putText(image, label,
-                    (int(box[0]+20), int(box[1]+40)),
-                    cv2.FONT_HERSHEY_SIMPLEX,
-                    1,  # font scale
-                    (255, 0, 255),
-                    2)  # line type
-
-    cv2.imshow('MobileNetv2 SSD', image)
+    cv2.imshow('MobileNetv2 SSD Lite', image)
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break

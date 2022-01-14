@@ -38,9 +38,6 @@ logger = log.get_logger(__name__)
 
 if __name__ == '__main__':
 
-    base_net_lr = 1e-3
-    extra_layers_lr = 1e-3
-
     batch_size = 32
     num_workers = 0
 
@@ -70,7 +67,7 @@ if __name__ == '__main__':
 
     logger.info("Train dataset size: {}".format(len(train_dataset)))
 
-    # Load Validation Dataset from FiftyOne
+    # Load Validation Dataset from FiftyOne (use voc-2007 train as validation here)
     val_dataset  = FiftyOneDataset(foz.load_zoo_dataset("voc-2007", split="train"), 
                                             foz.load_zoo_dataset_info("voc-2007").classes,
                                             transform=test_transform,
