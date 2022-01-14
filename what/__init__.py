@@ -11,6 +11,7 @@ This module implements several utility functions.
 # Project Imports
 from what import models
 from what import attacks
+from what import utils
 
 # Semantic Version
 __version__ = "0.0.1"
