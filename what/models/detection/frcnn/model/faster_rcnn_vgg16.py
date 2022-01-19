@@ -5,7 +5,7 @@ from torchvision.ops import RoIPool
 
 from what.models.detection.frcnn.model.region_proposal_network import RegionProposalNetwork
 from what.models.detection.frcnn.model.faster_rcnn_model import FasterRCNNModel
-from what.models.detection.utils import array_utils as at
+from what.models.detection.utils.array_utils import to_numpy, to_tensor
 from what.models.detection.frcnn.utils.config import opt
 
 def decom_vgg16():
@@ -131,8 +131,8 @@ class VGG16RoIHead(nn.Module):
 
         """
         # in case roi_indices is  ndarray
-        roi_indices = at.totensor(roi_indices).float()
-        rois = at.totensor(rois).float()
+        roi_indices = to_tensor(roi_indices).float()
+        rois = to_tensor(rois).float()
         indices_and_rois = torch.cat([roi_indices[:, None], rois], dim=1)
         # NOTE: important: yx->xy
         xy_indices_and_rois = indices_and_rois[:, [0, 2, 1, 4, 3]]

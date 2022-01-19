@@ -6,7 +6,7 @@ import torch
 from torch import nn
 from torch.nn import functional as F
 
-from torchnet.meter import ConfusionMeter, AverageValueMeter
+from what.models.detection.frcnn.meter import ConfusionMeter, AverageValueMeter
 
 from what.models.detection.frcnn.model.utils.creator_tool import AnchorTargetCreator, ProposalTargetCreator
 from what.models.detection.frcnn.model.faster_rcnn_vgg16 import FasterRCNNVGG16

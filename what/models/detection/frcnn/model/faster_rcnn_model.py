@@ -9,7 +9,7 @@ from torch.nn import functional as F
 
 from what.models.detection.frcnn.model.utils.bbox_tools import loc2bbox
 from what.models.detection.frcnn.datasets.dataset import preprocess
-from what.models.detection.utils import array_utils as at
+from what.models.detection.utils.array_utils import to_numpy, to_tensor
 from what.models.detection.frcnn.utils.config import opt
 
 def nograd(f):
@@ -218,7 +218,7 @@ class FasterRCNNModel(nn.Module):
         sizes = list()
         for img in imgs:
             size = img.shape[1:]
-            img = preprocess(at.tonumpy(img))
+            img = preprocess(to_numpy(img))
             prepared_imgs.append(img)
             sizes.append(size)
         # else:
@@ -230,14 +230,14 @@ class FasterRCNNModel(nn.Module):
         scores = list()
         inputs = list()
         for img, size in zip(prepared_imgs, sizes):
-            img = at.totensor(img[None]).float()
+            img = to_tensor(img[None]).float()
             scale = img.shape[3] / size[1]
             inputs.append(img)
             roi_cls_loc, roi_scores, rois, _ = self(img, scale=scale)
             # We are assuming that batch size is 1.
             roi_score = roi_scores.data
             roi_cls_loc = roi_cls_loc.data
-            roi = at.totensor(rois) / scale
+            roi = to_tensor(rois) / scale
 
             # Convert predictions to bounding boxes in image coordinates.
             # Bounding boxes are scaled to the scale of the input images.
@@ -253,15 +253,15 @@ class FasterRCNNModel(nn.Module):
             roi_cls_loc = (roi_cls_loc * std + mean)
             roi_cls_loc = roi_cls_loc.view(-1, self.n_class, 4)
             roi = roi.view(-1, 1, 4).expand_as(roi_cls_loc)
-            cls_bbox = loc2bbox(at.tonumpy(roi).reshape((-1, 4)),
-                                at.tonumpy(roi_cls_loc).reshape((-1, 4)))
-            cls_bbox = at.totensor(cls_bbox)
+            cls_bbox = loc2bbox(to_numpy(roi).reshape((-1, 4)),
+                                to_numpy(roi_cls_loc).reshape((-1, 4)))
+            cls_bbox = to_tensor(cls_bbox)
             cls_bbox = cls_bbox.view(-1, self.n_class * 4)
             # clip bounding box
             cls_bbox[:, 0::2] = (cls_bbox[:, 0::2]).clamp(min=0, max=size[0])
             cls_bbox[:, 1::2] = (cls_bbox[:, 1::2]).clamp(min=0, max=size[1])
 
-            prob = (F.softmax(at.totensor(roi_score), dim=1))
+            prob = (F.softmax(to_tensor(roi_score), dim=1))
 
             bbox, label, score = self._suppress(cls_bbox, prob)
             # (ymin, xmin, ymax, xmax) -> (xmin, ymin, xmax, ymax)
