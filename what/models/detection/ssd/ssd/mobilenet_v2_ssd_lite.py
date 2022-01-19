@@ -1,11 +1,13 @@
 import torch
-from torch.nn import Conv2d, Sequential, ModuleList, BatchNorm2d
 from torch import nn
-from ..nn.mobilenet_v2 import MobileNetV2, InvertedResidual
+from torch.nn import Conv2d, Sequential, ModuleList, BatchNorm2d
 
-from .ssd import SSD, GraphPath
-from .predictor import Predictor
-from .config import mobilenetv1_ssd_config as config
+
+from what.models.detection.ssd.ssd import SSD, GraphPath
+from what.models.detection.ssd.ssd import mobilenetv1_ssd_config as config
+from what.models.detection.ssd.ssd.predictor import Predictor
+from what.models.detection.ssd.nn.mobilenet_v2 import MobileNetV2, InvertedResidual
+
 
 def SeperableConv2d(in_channels, out_channels, kernel_size=1, stride=1, padding=0, onnx_compatible=False):
     """Replace Conv2d with a depthwise Conv2d and Pointwise Conv2d.
@@ -18,6 +20,7 @@ def SeperableConv2d(in_channels, out_channels, kernel_size=1, stride=1, padding=
         ReLU(),
         Conv2d(in_channels=in_channels, out_channels=out_channels, kernel_size=1),
     )
+
 
 def create_mobilenetv2_ssd_lite(num_classes, width_mult=1.0, use_batch_norm=True, onnx_compatible=False, is_test=False):
     base_net = MobileNetV2(width_mult=width_mult, use_batch_norm=use_batch_norm,
@@ -55,6 +58,7 @@ def create_mobilenetv2_ssd_lite(num_classes, width_mult=1.0, use_batch_norm=True
 
     return SSD(num_classes, base_net, source_layer_indexes,
                extras, classification_headers, regression_headers, is_test=is_test, config=config)
+
 
 def create_mobilenetv2_ssd_lite_predictor(net, candidate_size=200, nms_method=None, sigma=0.5, device=torch.device('cpu')):
     predictor = Predictor(net, config.image_size, config.image_mean,

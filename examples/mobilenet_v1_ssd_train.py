@@ -10,7 +10,7 @@ from what.models.detection.datasets.voc import VOCDataset
 
 from what.models.detection.ssd.ssd.ssd import MatchPrior
 from what.models.detection.ssd.ssd.preprocessing import TrainAugmentation, TestTransform
-from what.models.detection.ssd.ssd.config import mobilenetv1_ssd_config
+from what.models.detection.ssd.ssd import mobilenetv1_ssd_config
 
 from what.models.detection.ssd.mobilenet_v1_ssd import MobileNetV1SSD
 

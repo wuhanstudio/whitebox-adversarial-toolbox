@@ -1,9 +1,11 @@
 import math
 import torch.nn as nn
 
+
 # Modified from https://github.com/tonylins/pytorch-mobilenet-v2/blob/master/MobileNetV2.py.
 # In this version, Relu6 is replaced with Relu to make it ONNX compatible.
 # BatchNorm Layer is optional to make it easy do batch norm confusion.
+
 
 def conv_bn(inp, oup, stride, use_batch_norm=True, onnx_compatible=False):
     ReLU = nn.ReLU if onnx_compatible else nn.ReLU6
@@ -20,6 +22,7 @@ def conv_bn(inp, oup, stride, use_batch_norm=True, onnx_compatible=False):
             ReLU(inplace=True)
         )
 
+
 def conv_1x1_bn(inp, oup, use_batch_norm=True, onnx_compatible=False):
     ReLU = nn.ReLU if onnx_compatible else nn.ReLU6
     if use_batch_norm:
@@ -33,6 +36,7 @@ def conv_1x1_bn(inp, oup, use_batch_norm=True, onnx_compatible=False):
             nn.Conv2d(inp, oup, 1, 1, 0, bias=False),
             ReLU(inplace=True)
         )
+
 
 class InvertedResidual(nn.Module):
     def __init__(self, inp, oup, stride, expand_ratio, use_batch_norm=True, onnx_compatible=False):
@@ -96,6 +100,7 @@ class InvertedResidual(nn.Module):
             return x + self.conv(x)
         else:
             return self.conv(x)
+
 
 class MobileNetV2(nn.Module):
     def __init__(self, n_class=1000, input_size=224, width_mult=1., dropout_ratio=0.2,

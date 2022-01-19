@@ -2,7 +2,7 @@ import torch
 
 from ..utils import box_utils
 from .preprocessing import PredictionTransform
-from ..utils.misc import Timer
+from what.models.detection.utils.time_utils import Timer
 
 class Predictor:
     def __init__(self, net, size, mean=0.0, std=1.0, nms_method=None,

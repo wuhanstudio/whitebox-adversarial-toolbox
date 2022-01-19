@@ -12,6 +12,7 @@ def intersect(box_a, box_b):
     inter = np.clip((max_xy - min_xy), a_min=0, a_max=np.inf)
     return inter[:, 0] * inter[:, 1]
 
+
 def jaccard_numpy(box_a, box_b):
     """Compute the jaccard overlap of two sets of boxes.  The jaccard overlap
     is simply the intersection over union of two boxes.
@@ -50,6 +51,7 @@ class Compose(object):
             img, boxes, labels = t(img, boxes, labels)
         return img, boxes, labels
 
+
 class Lambda(object):
     """Applies a lambda as a transform."""
 
@@ -60,9 +62,11 @@ class Lambda(object):
     def __call__(self, img, boxes=None, labels=None):
         return self.lambd(img, boxes, labels)
 
+
 class ConvertFromInts(object):
     def __call__(self, image, boxes=None, labels=None):
         return image.astype(np.float32), boxes, labels
+
 
 class SubtractMeans(object):
     def __init__(self, mean):
@@ -72,6 +76,7 @@ class SubtractMeans(object):
         image = image.astype(np.float32)
         image -= self.mean
         return image.astype(np.float32), boxes, labels
+
 
 class ToAbsoluteCoords(object):
     def __call__(self, image, boxes=None, labels=None):
@@ -83,6 +88,7 @@ class ToAbsoluteCoords(object):
 
         return image, boxes, labels
 
+
 class ToPercentCoords(object):
     def __call__(self, image, boxes=None, labels=None):
         height, width, channels = image.shape
@@ -93,6 +99,7 @@ class ToPercentCoords(object):
 
         return image, boxes, labels
 
+
 class Resize(object):
     def __init__(self, size=300):
         self.size = size
@@ -101,6 +108,7 @@ class Resize(object):
         image = cv2.resize(image, (self.size,
                                  self.size))
         return image, boxes, labels
+
 
 class RandomSaturation(object):
     def __init__(self, lower=0.5, upper=1.5):
@@ -115,6 +123,7 @@ class RandomSaturation(object):
 
         return image, boxes, labels
 
+
 class RandomHue(object):
     def __init__(self, delta=18.0):
         assert delta >= 0.0 and delta <= 360.0
@@ -126,6 +135,7 @@ class RandomHue(object):
             image[:, :, 0][image[:, :, 0] > 360.0] -= 360.0
             image[:, :, 0][image[:, :, 0] < 0.0] += 360.0
         return image, boxes, labels
+
 
 class RandomLightingNoise(object):
     def __init__(self):
@@ -139,6 +149,7 @@ class RandomLightingNoise(object):
             shuffle = SwapChannels(swap)  # shuffle channels
             image = shuffle(image)
         return image, boxes, labels
+
 
 class ConvertColor(object):
     def __init__(self, current, transform):
@@ -160,6 +171,7 @@ class ConvertColor(object):
             raise NotImplementedError
         return image, boxes, labels
 
+
 class RandomContrast(object):
     def __init__(self, lower=0.5, upper=1.5):
         self.lower = lower
@@ -174,6 +186,7 @@ class RandomContrast(object):
             image *= alpha
         return image, boxes, labels
 
+
 class RandomBrightness(object):
     def __init__(self, delta=32):
         assert delta >= 0.0
@@ -186,13 +199,16 @@ class RandomBrightness(object):
             image += delta
         return image, boxes, labels
 
+
 class ToCV2Image(object):
     def __call__(self, tensor, boxes=None, labels=None):
         return tensor.cpu().numpy().astype(np.float32).transpose((1, 2, 0)), boxes, labels
 
+
 class ToTensor(object):
     def __call__(self, cvimage, boxes=None, labels=None):
         return torch.from_numpy(cvimage.astype(np.float32)).permute(2, 0, 1), boxes, labels
+
 
 class RandomSampleCrop(object):
     """Crop
@@ -297,6 +313,7 @@ class RandomSampleCrop(object):
 
                 return current_image, current_boxes, current_labels
 
+
 class Expand(object):
     def __init__(self, mean):
         self.mean = mean
@@ -324,6 +341,7 @@ class Expand(object):
 
         return image, boxes, labels
 
+
 class RandomMirror(object):
     def __call__(self, image, boxes, classes):
         _, width, _ = image.shape
@@ -332,6 +350,7 @@ class RandomMirror(object):
             boxes = boxes.copy()
             boxes[:, 0::2] = width - boxes[:, 2::-2]
         return image, boxes, classes
+
 
 class SwapChannels(object):
     """Transforms a tensorized image by swapping the channels in the order
@@ -357,6 +376,7 @@ class SwapChannels(object):
         #     image = np.array(image)
         image = image[:, :, self.swaps]
         return image
+
 
 class PhotometricDistort(object):
     def __init__(self):

@@ -10,11 +10,9 @@ from torchnet.meter import ConfusionMeter, AverageValueMeter
 
 from what.models.detection.frcnn.model.utils.creator_tool import AnchorTargetCreator, ProposalTargetCreator
 from what.models.detection.frcnn.model.faster_rcnn_vgg16 import FasterRCNNVGG16
-from what.models.detection.frcnn.utils import array_tool as at
+from what.models.detection.utils.array_utils import to_numpy, to_scalar, to_tensor
 from what.models.detection.frcnn.utils.config import opt
 from what.models.detection.frcnn.utils.eval_tool import eval_detection_voc
-
-# from utils.vis_tool import Visualizer
 
 LossTuple = namedtuple('LossTuple',
                        ['rpn_loc_loss',
@@ -76,8 +74,6 @@ class FasterRCNN(nn.Module):
         self.loc_normalize_std = self.faster_rcnn.loc_normalize_std
 
         self.optimizer = self.faster_rcnn.get_optimizer()
-        # visdom wrapper
-        # self.vis = Visualizer(env=opt.env)
 
         # indicators for training status
         self.rpn_cm = ConfusionMeter(2)
@@ -136,8 +132,8 @@ class FasterRCNN(nn.Module):
         # consider them as constant input
         sample_roi, gt_roi_loc, gt_roi_label = self.proposal_target_creator(
             roi,
-            at.tonumpy(bbox),
-            at.tonumpy(label),
+            to_numpy(bbox),
+            to_numpy(label),
             self.loc_normalize_mean,
             self.loc_normalize_std)
         # NOTE it's all zero because now it only support for batch=1 now
@@ -149,11 +145,11 @@ class FasterRCNN(nn.Module):
 
         # ------------------ RPN losses -------------------#
         gt_rpn_loc, gt_rpn_label = self.anchor_target_creator(
-            at.tonumpy(bbox),
+            to_numpy(bbox),
             anchor,
             img_size)
-        gt_rpn_label = at.totensor(gt_rpn_label).long()
-        gt_rpn_loc = at.totensor(gt_rpn_loc)
+        gt_rpn_label = to_tensor(gt_rpn_label).long()
+        gt_rpn_loc = to_tensor(gt_rpn_loc)
         rpn_loc_loss = _fast_rcnn_loc_loss(
             rpn_loc,
             gt_rpn_loc,
@@ -163,16 +159,16 @@ class FasterRCNN(nn.Module):
         # NOTE: default value of ignore_index is -100 ...
         rpn_cls_loss = F.cross_entropy(rpn_score, gt_rpn_label.cuda(), ignore_index=-1)
         _gt_rpn_label = gt_rpn_label[gt_rpn_label > -1]
-        _rpn_score = at.tonumpy(rpn_score)[at.tonumpy(gt_rpn_label) > -1]
-        self.rpn_cm.add(at.totensor(_rpn_score, False), _gt_rpn_label.data.long())
+        _rpn_score = to_numpy(rpn_score)[to_numpy(gt_rpn_label) > -1]
+        self.rpn_cm.add(to_tensor(_rpn_score, False), _gt_rpn_label.data.long())
 
         # ------------------ ROI losses (fast rcnn loss) -------------------#
         n_sample = roi_cls_loc.shape[0]
         roi_cls_loc = roi_cls_loc.view(n_sample, -1, 4)
         roi_loc = roi_cls_loc[torch.arange(0, n_sample).long().cuda(), \
-                              at.totensor(gt_roi_label).long()]
-        gt_roi_label = at.totensor(gt_roi_label).long()
-        gt_roi_loc = at.totensor(gt_roi_loc)
+                              to_tensor(gt_roi_label).long()]
+        gt_roi_label = to_tensor(gt_roi_label).long()
+        gt_roi_loc = to_tensor(gt_roi_loc)
 
         roi_loc_loss = _fast_rcnn_loc_loss(
             roi_loc.contiguous(),
@@ -182,7 +178,7 @@ class FasterRCNN(nn.Module):
 
         roi_cls_loss = nn.CrossEntropyLoss()(roi_score, gt_roi_label.cuda())
 
-        self.roi_cm.add(at.totensor(roi_score, False), gt_roi_label.data.long())
+        self.roi_cm.add(to_tensor(roi_score, False), gt_roi_label.data.long())
 
         losses = [rpn_loc_loss, rpn_cls_loss, roi_loc_loss, roi_cls_loss]
         losses = losses + [sum(losses)]
@@ -270,7 +266,7 @@ class FasterRCNN(nn.Module):
         return save_path
 
     def update_meters(self, losses):
-        loss_d = {k: at.scalar(v) for k, v in losses._asdict().items()}
+        loss_d = {k: to_scalar(v) for k, v in losses._asdict().items()}
         for key, meter in self.meters.items():
             meter.add(loss_d[key])
 

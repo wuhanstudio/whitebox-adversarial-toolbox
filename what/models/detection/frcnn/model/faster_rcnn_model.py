@@ -9,7 +9,7 @@ from torch.nn import functional as F
 
 from what.models.detection.frcnn.model.utils.bbox_tools import loc2bbox
 from what.models.detection.frcnn.datasets.dataset import preprocess
-from what.models.detection.frcnn.utils import array_tool as at
+from what.models.detection.utils import array_utils as at
 from what.models.detection.frcnn.utils.config import opt
 
 def nograd(f):

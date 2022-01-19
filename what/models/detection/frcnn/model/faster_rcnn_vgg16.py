@@ -5,7 +5,7 @@ from torchvision.ops import RoIPool
 
 from what.models.detection.frcnn.model.region_proposal_network import RegionProposalNetwork
 from what.models.detection.frcnn.model.faster_rcnn_model import FasterRCNNModel
-from what.models.detection.frcnn.utils import array_tool as at
+from what.models.detection.utils import array_utils as at
 from what.models.detection.frcnn.utils.config import opt
 
 def decom_vgg16():

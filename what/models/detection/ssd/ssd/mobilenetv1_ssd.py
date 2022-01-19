@@ -3,7 +3,7 @@ from ..nn.mobilenet import MobileNetV1
 
 from .ssd import SSD
 from .predictor import Predictor
-from .config import mobilenetv1_ssd_config as config
+from . import mobilenetv1_ssd_config as config
 
 def create_mobilenetv1_ssd(num_classes, is_test=False):
     base_net = MobileNetV1(1001).model  # disable dropout layer

@@ -2,12 +2,13 @@ import numpy as np
 
 from what.models.detection.ssd.utils.box_utils import SSDSpec, SSDBoxSizes, generate_ssd_priors
 
-image_size = 300
-image_mean = np.array([127, 127, 127])  # RGB layout
-image_std = 128.0
-iou_threshold = 0.45
+image_size  = 300
+image_mean  = np.array([127, 127, 127])  # RGB layout
+image_std   = 128.0
+
+iou_threshold   = 0.45
 center_variance = 0.1
-size_variance = 0.2
+size_variance   = 0.2
 
 specs = [
     SSDSpec(19, 16, SSDBoxSizes(60, 105), [2, 3]),

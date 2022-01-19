@@ -8,7 +8,7 @@ from what.models.detection.ssd.nn.multibox_loss import MultiboxLoss
 from what.models.detection.ssd.utils.misc import freeze_net_layers
 
 from what.models.detection.ssd.ssd.mobilenetv1_ssd import create_mobilenetv1_ssd, create_mobilenetv1_ssd_predictor
-from what.models.detection.ssd.ssd.config import mobilenetv1_ssd_config
+from what.models.detection.ssd.ssd import mobilenetv1_ssd_config
 
 from what.models.detection.datasets.voc import VOC_CLASS_NAMES
 

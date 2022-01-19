@@ -4,11 +4,12 @@ import collections
 from typing import List
 
 import torch
-import cv2
+
 
 SSDBoxSizes = collections.namedtuple('SSDBoxSizes', ['min', 'max'])
 
 SSDSpec = collections.namedtuple('SSDSpec', ['feature_map_size', 'shrinkage', 'box_sizes', 'aspect_ratios'])
+
 
 def generate_ssd_priors(specs: List[SSDSpec], image_size, clamp=True) -> torch.Tensor:
     """Generate SSD Prior Boxes.
@@ -80,6 +81,7 @@ def generate_ssd_priors(specs: List[SSDSpec], image_size, clamp=True) -> torch.T
         torch.clamp(priors, 0.0, 1.0, out=priors)
     return priors
 
+
 def convert_locations_to_boxes(locations, priors, center_variance,
                                size_variance):
     """Convert regressional location results of SSD into boxes in the form of (center_x, center_y, h, w).
@@ -105,6 +107,7 @@ def convert_locations_to_boxes(locations, priors, center_variance,
         torch.exp(locations[..., 2:] * size_variance) * priors[..., 2:]
     ], dim=locations.dim() - 1)
 
+
 def convert_boxes_to_locations(center_form_boxes, center_form_priors, center_variance, size_variance):
     # priors can have one dimension less
     if center_form_priors.dim() + 1 == center_form_boxes.dim():
@@ -113,6 +116,7 @@ def convert_boxes_to_locations(center_form_boxes, center_form_priors, center_var
         (center_form_boxes[..., :2] - center_form_priors[..., :2]) / center_form_priors[..., 2:] / center_variance,
         torch.log(center_form_boxes[..., 2:] / center_form_priors[..., 2:]) / size_variance
     ], dim=center_form_boxes.dim() - 1)
+
 
 def area_of(left_top, right_bottom) -> torch.Tensor:
     """Compute the areas of rectangles given two corners.
@@ -126,6 +130,7 @@ def area_of(left_top, right_bottom) -> torch.Tensor:
     """
     hw = torch.clamp(right_bottom - left_top, min=0.0)
     return hw[..., 0] * hw[..., 1]
+
 
 def iou_of(boxes0, boxes1, eps=1e-5):
     """Return intersection-over-union (Jaccard index) of boxes.
@@ -144,6 +149,7 @@ def iou_of(boxes0, boxes1, eps=1e-5):
     area0 = area_of(boxes0[..., :2], boxes0[..., 2:])
     area1 = area_of(boxes1[..., :2], boxes1[..., 2:])
     return overlap_area / (area0 + area1 - overlap_area + eps)
+
 
 def assign_priors(gt_boxes, gt_labels, corner_form_priors, iou_threshold):
     """Assign ground truth boxes and targets to priors.
@@ -173,6 +179,7 @@ def assign_priors(gt_boxes, gt_labels, corner_form_priors, iou_threshold):
     boxes = gt_boxes[best_target_per_prior_index]
     return boxes, labels
 
+
 def hard_negative_mining(loss, labels, neg_pos_ratio):
     """
     It used to suppress the presence of a large number of negative prediction.
@@ -197,15 +204,18 @@ def hard_negative_mining(loss, labels, neg_pos_ratio):
     neg_mask = orders < num_neg
     return pos_mask | neg_mask
 
+
 def center_form_to_corner_form(locations):
     return torch.cat([locations[..., :2] - locations[..., 2:]/2,
                      locations[..., :2] + locations[..., 2:]/2], locations.dim() - 1) 
+
 
 def corner_form_to_center_form(boxes):
     return torch.cat([
         (boxes[..., :2] + boxes[..., 2:]) / 2,
          boxes[..., 2:] - boxes[..., :2]
     ], boxes.dim() - 1)
+
 
 def hard_nms(box_scores, iou_threshold, top_k=-1, candidate_size=200):
     """
@@ -239,12 +249,14 @@ def hard_nms(box_scores, iou_threshold, top_k=-1, candidate_size=200):
 
     return box_scores[picked, :]
 
+
 def nms(box_scores, nms_method=None, score_threshold=None, iou_threshold=None,
         sigma=0.5, top_k=-1, candidate_size=200):
     if nms_method == "soft":
         return soft_nms(box_scores, score_threshold, sigma, top_k)
     else:
         return hard_nms(box_scores, iou_threshold, top_k, candidate_size=candidate_size)
+
 
 def soft_nms(box_scores, score_threshold, sigma=0.5, top_k=-1):
     """Soft NMS implementation.

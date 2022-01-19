@@ -7,7 +7,7 @@ from torch.optim.lr_scheduler import CosineAnnealingLR
 from what.models.detection.ssd.nn.multibox_loss import MultiboxLoss
 from what.models.detection.ssd.utils.misc import freeze_net_layers
 
-from what.models.detection.ssd.ssd.config import mobilenetv1_ssd_config
+from what.models.detection.ssd.ssd import mobilenetv1_ssd_config
 from what.models.detection.ssd.ssd.mobilenet_v2_ssd_lite import create_mobilenetv2_ssd_lite, create_mobilenetv2_ssd_lite_predictor
 
 logger = log.get_logger(__name__)

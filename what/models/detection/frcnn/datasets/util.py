@@ -49,6 +49,7 @@ def read_image(path, dtype=np.float32, color=True, format='NCHW'):
 
     return np.array(img)
 
+
 def resize_bbox(bbox, in_size, out_size):
     """Resize bounding boxes according to image resize.
 

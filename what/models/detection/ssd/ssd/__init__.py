@@ -1,4 +1,2 @@
-r'''
-This module implements several object detection models.
-```
-'''
+
+from what.models.detection.ssd.ssd.ssd import SSD, GraphPath
