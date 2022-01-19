@@ -1,1 +1,9 @@
 pytest
+numpy>=1.18.0,
+tqdm,
+six,
+setuptools,
+torch,
+torchvision,
+opencv-python,
+scikit-image

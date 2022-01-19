@@ -23,6 +23,10 @@ install_requires = [
     "tqdm",
     "six",
     "setuptools",
+    "torch",
+    "torchvision",
+    "opencv-python",
+    "scikit-image"
 ]
 
 setuptools.setup(
