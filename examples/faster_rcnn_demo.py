@@ -13,6 +13,8 @@ cap = cv2.VideoCapture(0)
 cap.set(3, 1920)
 cap.set(4, 1080)
 
+device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+
 while True:
     _, orig_image = cap.read()
     if orig_image is None:
@@ -31,7 +33,7 @@ while True:
 
     # model = FasterRCNN(faster_rcnn).cuda()
     model = FasterRCNN()
-    model.load('models/fasterrcnn_12211511_0.701052458187_torchvision_pretrain.pth', map_location=torch.device('cpu'))
+    model.load('models/fasterrcnn_12211511_0.701052458187_torchvision_pretrain.pth', map_location=device)
 
     inputs, boxes, labels, scores = model.predict(input)
 

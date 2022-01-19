@@ -5,7 +5,7 @@ import itertools
 import numpy as np
 import six
 
-from model.utils.bbox_tools import bbox_iou
+from what.models.detection.frcnn.model.utils.bbox_tools import bbox_iou
 
 
 def eval_detection_voc(

@@ -29,7 +29,7 @@ parser.add_argument('--checkpoint_folder', default='models/', help='Directory fo
 
 args = parser.parse_args()
 
-DEVICE = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 if torch.cuda.is_available():
     torch.backends.cudnn.benchmark = True
@@ -86,7 +86,7 @@ if __name__ == '__main__':
     # Create SSD network and load pretrained base net.
     model = MobileNetV1SSD(is_test=False)
 
-    model.train(train_loader, val_loader, device=DEVICE, num_epochs=5, debug_steps=10, validation_epochs=1,
+    model.train(train_loader, val_loader, device=device, num_epochs=5, debug_steps=10, validation_epochs=1,
                 freeze_base_net = args.freeze_base_net, freeze_net = args.freeze_net,
                 resume = args.resume, base_net = args.base_net, pretrained_ssd = args.pretrained_ssd,
                 checkpoint_folder = args.checkpoint_folder)

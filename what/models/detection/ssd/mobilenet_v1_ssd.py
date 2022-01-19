@@ -15,7 +15,7 @@ from what.models.detection.datasets.voc import VOC_CLASS_NAMES
 logger = log.get_logger(__name__)
 
 class MobileNetV1SSD:
-    def __init__(self, class_names = None, model_path=None, pretrained=None, is_test=False):
+    def __init__(self, class_names = None, model_path=None, pretrained=None, is_test=False, device=None):
 
         if class_names is None:
             self.class_names = VOC_CLASS_NAMES
@@ -28,6 +28,7 @@ class MobileNetV1SSD:
             pretrained = False
 
         self.predictor = None;
+        self.device = device;
 
         if pretrained is True:
             self.net.load("https://storage.googleapis.com/models-hao/mobilenet-v1-ssd-mp-0_675.pth", pretrained=True)
@@ -36,7 +37,7 @@ class MobileNetV1SSD:
 
     def predict(self, image, top_k=-1, prob_threshold=None):
         if self.predictor is None:
-            self.predictor = create_mobilenetv1_ssd_predictor(self.net, candidate_size=200)
+            self.predictor = create_mobilenetv1_ssd_predictor(self.net, device=self.device, candidate_size=200)
 
         return self.predictor.predict(image, top_k, prob_threshold)
 
