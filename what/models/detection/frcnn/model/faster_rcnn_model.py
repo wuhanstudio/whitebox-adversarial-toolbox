@@ -1,7 +1,8 @@
 from __future__ import division
 
 import numpy as np
-import torch as t
+
+import torch
 from torch import nn
 from torchvision.ops import nms
 from torch.nn import functional as F
@@ -14,7 +15,7 @@ from what.models.detection.frcnn.utils.config import opt
 
 def nograd(f):
     def new_f(*args,**kwargs):
-        with t.no_grad():
+        with torch.no_grad():
            return f(*args,**kwargs)
     return new_f
 
@@ -67,11 +68,13 @@ class FasterRCNNModel(nn.Module):
 
     """
 
-    def __init__(self, extractor, rpn, head,
+    def __init__(self, extractor, rpn, head, device = torch.device('cpu'),
                 loc_normalize_mean = (0., 0., 0., 0.),
                 loc_normalize_std = (0.1, 0.1, 0.2, 0.2)
     ):
         super(FasterRCNNModel, self).__init__()
+
+        self.device = device
         self.extractor = extractor
         self.rpn = rpn
         self.head = head
@@ -125,7 +128,7 @@ class FasterRCNNModel(nn.Module):
         """
         img_size = x.shape[2:]
 
-        h = self.extractor(x)
+        h = self.extractor(x.to(self.device))
         rpn_locs, rpn_scores, rois, roi_indices, anchor = \
             self.rpn(h, img_size, scale)
         roi_cls_locs, roi_scores = self.head(
@@ -230,20 +233,20 @@ class FasterRCNNModel(nn.Module):
         scores = list()
         inputs = list()
         for img, size in zip(prepared_imgs, sizes):
-            img = to_tensor(img[None]).float()
+            img = to_tensor(img[None], self.device).float()
             scale = img.shape[3] / size[1]
             inputs.append(img)
             roi_cls_loc, roi_scores, rois, _ = self(img, scale=scale)
             # We are assuming that batch size is 1.
             roi_score = roi_scores.data
             roi_cls_loc = roi_cls_loc.data
-            roi = to_tensor(rois) / scale
+            roi = to_tensor(rois, self.device) / scale
 
             # Convert predictions to bounding boxes in image coordinates.
             # Bounding boxes are scaled to the scale of the input images.
-            mean = t.Tensor(self.loc_normalize_mean). \
+            mean = torch.Tensor(self.loc_normalize_mean).to(self.device). \
                 repeat(self.n_class)[None]
-            std = t.Tensor(self.loc_normalize_std). \
+            std = torch.Tensor(self.loc_normalize_std).to(self.device). \
                 repeat(self.n_class)[None]
             # mean = t.Tensor(self.loc_normalize_mean).cuda(). \
             #     repeat(self.n_class)[None]
@@ -255,13 +258,13 @@ class FasterRCNNModel(nn.Module):
             roi = roi.view(-1, 1, 4).expand_as(roi_cls_loc)
             cls_bbox = loc2bbox(to_numpy(roi).reshape((-1, 4)),
                                 to_numpy(roi_cls_loc).reshape((-1, 4)))
-            cls_bbox = to_tensor(cls_bbox)
+            cls_bbox = to_tensor(cls_bbox, self.device)
             cls_bbox = cls_bbox.view(-1, self.n_class * 4)
             # clip bounding box
             cls_bbox[:, 0::2] = (cls_bbox[:, 0::2]).clamp(min=0, max=size[0])
             cls_bbox[:, 1::2] = (cls_bbox[:, 1::2]).clamp(min=0, max=size[1])
 
-            prob = (F.softmax(to_tensor(roi_score), dim=1))
+            prob = (F.softmax(to_tensor(roi_score, self.device), dim=1))
 
             bbox, label, score = self._suppress(cls_bbox, prob)
             # (ymin, xmin, ymax, xmax) -> (xmin, ymin, xmax, ymax)
@@ -287,16 +290,12 @@ class FasterRCNNModel(nn.Module):
                 else:
                     params += [{'params': [value], 'lr': lr, 'weight_decay': opt.weight_decay}]
         if opt.use_adam:
-            self.optimizer = t.optim.Adam(params)
+            self.optimizer = torch.optim.Adam(params)
         else:
-            self.optimizer = t.optim.SGD(params, momentum=0.9)
+            self.optimizer = torch.optim.SGD(params, momentum=0.9)
         return self.optimizer
 
     def scale_lr(self, decay=0.1):
         for param_group in self.optimizer.param_groups:
             param_group['lr'] *= decay
         return self.optimizer
-
-
-
-

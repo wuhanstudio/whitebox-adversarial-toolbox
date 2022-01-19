@@ -31,8 +31,7 @@ while True:
     # RGB --> BGR
     # img = img.transpose((1, 2, 0)).astype(np.uint8)
 
-    # model = FasterRCNN(faster_rcnn).cuda()
-    model = FasterRCNN()
+    model = FasterRCNN(device=device)
     model.load('models/fasterrcnn_12211511_0.701052458187_torchvision_pretrain.pth', map_location=device)
 
     inputs, boxes, labels, scores = model.predict(input)

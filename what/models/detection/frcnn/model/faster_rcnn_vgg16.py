@@ -8,14 +8,14 @@ from what.models.detection.frcnn.model.faster_rcnn_model import FasterRCNNModel
 from what.models.detection.utils.array_utils import to_numpy, to_tensor
 from what.models.detection.frcnn.utils.config import opt
 
-def decom_vgg16():
+def decom_vgg16(device):
     # the 30th layer of features is relu of conv5_3
     if opt.caffe_pretrain:
         model = vgg16(pretrained=False)
         if not opt.load_path:
-            model.load_state_dict(torch.load(opt.caffe_pretrain_path))
+            model.load_state_dict(torch.load(opt.caffe_pretrain_path, map_location=device))
     else:
-        model = vgg16(not opt.load_path)
+        model = vgg16(not opt.load_path).to(device)
 
     features = list(model.features)[:30]
     classifier = model.classifier
@@ -54,31 +54,35 @@ class FasterRCNNVGG16(FasterRCNNModel):
     feat_stride = 16  # downsample 16x for output of conv5 in vgg16
 
     def __init__(self,
+                 device,
                  n_fg_class=20,
                  ratios=[0.5, 1, 2],
                  anchor_scales=[8, 16, 32]
                  ):
-                 
-        extractor, classifier = decom_vgg16()
+
+        self.device = device
+
+        extractor, classifier = decom_vgg16(device=self.device)
 
         rpn = RegionProposalNetwork(
             512, 512,
             ratios=ratios,
             anchor_scales=anchor_scales,
             feat_stride=self.feat_stride,
-        )
+        ).to(device)
 
         head = VGG16RoIHead(
             n_class=n_fg_class + 1,
             roi_size=7,
             spatial_scale=(1. / self.feat_stride),
-            classifier=classifier
-        )
+            classifier=classifier, device=device
+        ).to(device)
 
         super(FasterRCNNVGG16, self).__init__(
             extractor,
             rpn,
             head,
+            device=device
         )
 
 
@@ -97,9 +101,11 @@ class VGG16RoIHead(nn.Module):
     """
 
     def __init__(self, n_class, roi_size, spatial_scale,
-                 classifier):
+                 classifier, device = torch.device('cpu')):
         # n_class includes the background
         super(VGG16RoIHead, self).__init__()
+
+        self.device = device
 
         self.classifier = classifier
         self.cls_loc = nn.Linear(4096, n_class * 4)
@@ -131,8 +137,8 @@ class VGG16RoIHead(nn.Module):
 
         """
         # in case roi_indices is  ndarray
-        roi_indices = to_tensor(roi_indices).float()
-        rois = to_tensor(rois).float()
+        roi_indices = to_tensor(roi_indices, self.device).float()
+        rois = to_tensor(rois, self.device).float()
         indices_and_rois = torch.cat([roi_indices[:, None], rois], dim=1)
         # NOTE: important: yx->xy
         xy_indices_and_rois = indices_and_rois[:, [0, 2, 1, 4, 3]]

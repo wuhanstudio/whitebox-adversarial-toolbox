@@ -12,14 +12,12 @@ def to_numpy(data):
         return data.detach().cpu().numpy()
 
 
-def to_tensor(data, cuda=False):
+def to_tensor(data, device):
     if isinstance(data, np.ndarray):
         tensor = t.from_numpy(data)
     if isinstance(data, t.Tensor):
         tensor = data.detach()
-    if cuda:
-        tensor = tensor.cuda()
-    return tensor
+    return tensor.to(device)
 
 
 def to_scalar(data):

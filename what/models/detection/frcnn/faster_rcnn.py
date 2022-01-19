@@ -32,11 +32,11 @@ def _smooth_l1_loss(x, t, in_weight, sigma):
     return y.sum()
 
 def _fast_rcnn_loc_loss(pred_loc, gt_loc, gt_label, sigma):
-    in_weight = torch.zeros(gt_loc.shape).cuda()
+    in_weight = torch.zeros(gt_loc.shape)
     # Localization loss is calculated only for positive rois.
     # NOTE:  unlike origin implementation, 
     # we don't need inside_weight and outside_weight, they can calculate by gt_label
-    in_weight[(gt_label > 0).view(-1, 1).expand_as(in_weight).cuda()] = 1
+    in_weight[(gt_label > 0).view(-1, 1).expand_as(in_weight)] = 1
     loc_loss = _smooth_l1_loss(pred_loc, gt_loc, in_weight.detach(), sigma)
     # Normalize by total number of negtive and positive rois.
     loc_loss /= ((gt_label >= 0).sum().float()) # ignore gt_label==-1 for rpn_loss
@@ -59,10 +59,12 @@ class FasterRCNN(nn.Module):
             A Faster R-CNN model that is going to be trained.
     """
 
-    def __init__(self):
+    def __init__(self, device=torch.device('cpu')):
         super(FasterRCNN, self).__init__()
 
-        self.faster_rcnn = FasterRCNNVGG16()
+        self.device = device
+
+        self.faster_rcnn = FasterRCNNVGG16(device=device)
         self.rpn_sigma = opt.rpn_sigma
         self.roi_sigma = opt.roi_sigma
 
@@ -148,8 +150,8 @@ class FasterRCNN(nn.Module):
             to_numpy(bbox),
             anchor,
             img_size)
-        gt_rpn_label = to_tensor(gt_rpn_label).long()
-        gt_rpn_loc = to_tensor(gt_rpn_loc)
+        gt_rpn_label = to_tensor(gt_rpn_label, self.device).long()
+        gt_rpn_loc = to_tensor(gt_rpn_loc, self.device)
         rpn_loc_loss = _fast_rcnn_loc_loss(
             rpn_loc,
             gt_rpn_loc,
@@ -157,18 +159,18 @@ class FasterRCNN(nn.Module):
             self.rpn_sigma)
 
         # NOTE: default value of ignore_index is -100 ...
-        rpn_cls_loss = F.cross_entropy(rpn_score, gt_rpn_label.cuda(), ignore_index=-1)
+        rpn_cls_loss = F.cross_entropy(rpn_score, gt_rpn_label.to(self.device), ignore_index=-1)
         _gt_rpn_label = gt_rpn_label[gt_rpn_label > -1]
         _rpn_score = to_numpy(rpn_score)[to_numpy(gt_rpn_label) > -1]
-        self.rpn_cm.add(to_tensor(_rpn_score, False), _gt_rpn_label.data.long())
+        self.rpn_cm.add(to_tensor(_rpn_score, torch.device("cpu")), _gt_rpn_label.data.long())
 
         # ------------------ ROI losses (fast rcnn loss) -------------------#
         n_sample = roi_cls_loc.shape[0]
         roi_cls_loc = roi_cls_loc.view(n_sample, -1, 4)
-        roi_loc = roi_cls_loc[torch.arange(0, n_sample).long().cuda(), \
-                              to_tensor(gt_roi_label).long()]
-        gt_roi_label = to_tensor(gt_roi_label).long()
-        gt_roi_loc = to_tensor(gt_roi_loc)
+        roi_loc = roi_cls_loc[torch.arange(0, n_sample).long().to(self.device), \
+                              to_tensor(gt_roi_label, self.device).long()]
+        gt_roi_label = to_tensor(gt_roi_label, self.device).long()
+        gt_roi_loc = to_tensor(gt_roi_loc, self.device)
 
         roi_loc_loss = _fast_rcnn_loc_loss(
             roi_loc.contiguous(),
@@ -176,9 +178,9 @@ class FasterRCNN(nn.Module):
             gt_roi_label.data,
             self.roi_sigma)
 
-        roi_cls_loss = nn.CrossEntropyLoss()(roi_score, gt_roi_label.cuda())
+        roi_cls_loss = nn.CrossEntropyLoss()(roi_score, gt_roi_label)
 
-        self.roi_cm.add(to_tensor(roi_score, False), gt_roi_label.data.long())
+        self.roi_cm.add(to_tensor(roi_score, torch.device("cpu")), gt_roi_label.data.long())
 
         losses = [rpn_loc_loss, rpn_cls_loss, roi_loc_loss, roi_cls_loss]
         losses = losses + [sum(losses)]
