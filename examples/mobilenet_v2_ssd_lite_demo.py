@@ -1,7 +1,7 @@
 import cv2
 import sys
 from what.models.detection.ssd.mobilenet_v2_ssd_lite import MobileNetV2SSDLite
-from what.models.detection.ssd.utils.box_utils import draw_bounding_boxes
+from what.models.detection.utils.box_utils import draw_bounding_boxes
 
 # Capture from camera
 cap = cv2.VideoCapture(0)

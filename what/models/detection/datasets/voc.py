@@ -4,6 +4,28 @@ import numpy as np
 import xml.etree.ElementTree as ET
 import cv2
 
+VOC_CLASS_NAMES =  ["BACKGROUND",
+                    "aeroplane",
+                    "bicycle",
+                    "bird",
+                    "boat",
+                    "bottle",
+                    "bus",
+                    "car",
+                    "cat",
+                    "chair",
+                    "cow",
+                    "diningtable",
+                    "dog",
+                    "horse",
+                    "motorbike",
+                    "person",
+                    "pottedplant",
+                    "sheep",
+                    "sofa",
+                    "train",
+                    "tvmonitor"]
+
 class VOCDataset:
 
     def __init__(self, root, transform=None, target_transform=None, is_test=False, keep_difficult=False, label_file=None):

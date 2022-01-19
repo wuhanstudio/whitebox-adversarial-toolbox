@@ -12,27 +12,7 @@ from what.models.detection.ssd.ssd.mobilenet_v2_ssd_lite import create_mobilenet
 
 logger = log.get_logger(__name__)
 
-VOC_CLASS_NAMES =  ["background",
-                    "aeroplane",
-                    "bicycle",
-                    "bird",
-                    "boat",
-                    "bottle",
-                    "bus",
-                    "car",
-                    "cat",
-                    "chair",
-                    "cow",
-                    "diningtable",
-                    "dog",
-                    "horse",
-                    "motorbike",
-                    "person",
-                    "pottedplant",
-                    "sheep",
-                    "sofa",
-                    "train",
-                    "tvmonitor"]
+from what.models.detection.datasets.voc import VOC_CLASS_NAMES
 
 class MobileNetV2SSDLite:
     def __init__(self, class_names = None, model_path = None, pretrained = None, width_mult = 1.0, is_test=False):
@@ -168,7 +148,7 @@ class MobileNetV2SSDLite:
             scheduler.step()
 
             if (epoch % validation_epochs == 0) or (epoch == num_epochs - 1):
-                val_loss, val_regression_loss, val_classification_loss = self.test(val_loader, criterion, device)
+                val_loss, val_regression_loss, val_classification_loss = self.eval(val_loader, criterion, device)
                 logger.info(
                     f"Epoch: {epoch}, " +
                     f"Validation Loss: {val_loss:.4f}, " +
@@ -180,7 +160,7 @@ class MobileNetV2SSDLite:
 
                 logger.info(f"Saved model {model_path}")
 
-    def test(self, loader, criterion, device):
+    def eval(self, loader, criterion, device):
         self.net.eval()
         running_loss = 0.0
         running_regression_loss = 0.0

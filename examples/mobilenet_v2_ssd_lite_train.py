@@ -5,8 +5,8 @@ import what.utils.logger as log
 import torch
 from torch.utils.data import DataLoader
 
-from what.models.detection.ssd.datasets.fiftyone import FiftyOneDataset
-from what.models.detection.ssd.datasets.voc import VOCDataset
+from what.models.detection.datasets.fiftyone import FiftyOneDataset
+from what.models.detection.datasets.voc import VOCDataset
 
 from what.models.detection.ssd.ssd.ssd import MatchPrior
 from what.models.detection.ssd.ssd.preprocessing import TrainAugmentation, TestTransform

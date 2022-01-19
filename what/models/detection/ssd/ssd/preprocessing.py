@@ -24,7 +24,6 @@ class TrainAugmentation:
 
     def __call__(self, img, boxes, labels):
         """
-
         Args:
             img: the output of cv.imread in RGB layout.
             boxes: boundding boxes in the form of (x1, y1, x2, y2).

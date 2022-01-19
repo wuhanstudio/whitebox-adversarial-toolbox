@@ -10,25 +10,6 @@ SSDBoxSizes = collections.namedtuple('SSDBoxSizes', ['min', 'max'])
 
 SSDSpec = collections.namedtuple('SSDSpec', ['feature_map_size', 'shrinkage', 'box_sizes', 'aspect_ratios'])
 
-def draw_bounding_boxes(image, boxes, labels, class_names, probs):
-    # Draw bounding boxes and labels
-    for i in range(boxes.size(0)):
-        box = boxes[i, :]
-        label = f"{class_names[labels[i]]}: {probs[i]:.2f}"
-        print(label)
-
-        # Draw bounding boxes
-        cv2.rectangle(image, (int(box[0].item()), int(box[1].item())), (int(box[2].item()), int(box[3].item())), (255, 255, 0), 4)
-
-        # Draw labels
-        cv2.putText(image, label,
-                    (int(box[0]+20), int(box[1]+40)),
-                    cv2.FONT_HERSHEY_SIMPLEX,
-                    1,  # font scale
-                    (255, 0, 255),
-                    2)  # line type
-    return image
-
 def generate_ssd_priors(specs: List[SSDSpec], image_size, clamp=True) -> torch.Tensor:
     """Generate SSD Prior Boxes.
 

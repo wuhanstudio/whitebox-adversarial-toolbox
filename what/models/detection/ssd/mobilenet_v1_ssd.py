@@ -10,29 +10,9 @@ from what.models.detection.ssd.utils.misc import freeze_net_layers
 from what.models.detection.ssd.ssd.mobilenetv1_ssd import create_mobilenetv1_ssd, create_mobilenetv1_ssd_predictor
 from what.models.detection.ssd.ssd.config import mobilenetv1_ssd_config
 
-logger = log.get_logger(__name__)
+from what.models.detection.datasets.voc import VOC_CLASS_NAMES
 
-VOC_CLASS_NAMES =  ["BACKGROUND",
-                    "aeroplane",
-                    "bicycle",
-                    "bird",
-                    "boat",
-                    "bottle",
-                    "bus",
-                    "car",
-                    "cat",
-                    "chair",
-                    "cow",
-                    "diningtable",
-                    "dog",
-                    "horse",
-                    "motorbike",
-                    "person",
-                    "pottedplant",
-                    "sheep",
-                    "sofa",
-                    "train",
-                    "tvmonitor"]
+logger = log.get_logger(__name__)
 
 class MobileNetV1SSD:
     def __init__(self, class_names = None, model_path=None, pretrained=None, is_test=False):
@@ -96,12 +76,12 @@ class MobileNetV1SSD:
                 running_classification_loss = 0.0
 
     def train(self, train_loader, val_loader, device = "cpu", 
-            scheduler = None, criterion = None, optimizer = None, 
-            lr = 1e-3, base_net_lr = 1e-3, extra_layers_lr = 1e-3, num_epochs = 100, momentum = 0.9, weight_decay = 5e-4, 
-            debug_steps = 100, validation_epochs = 5,
-            freeze_base_net = False, freeze_net = False,
-            resume = None, base_net = None, pretrained_ssd = None,
-            checkpoint_folder = "models/"):
+             scheduler = None, criterion = None, optimizer = None, 
+             lr = 1e-3, base_net_lr = 1e-3, extra_layers_lr = 1e-3, num_epochs = 100, momentum = 0.9, weight_decay = 5e-4, 
+             debug_steps = 100, validation_epochs = 5,
+             freeze_base_net = False, freeze_net = False,
+             resume = None, base_net = None, pretrained_ssd = None,
+             checkpoint_folder = "models/"):
 
         if freeze_base_net:
             logger.info("Freeze base net.")
@@ -168,7 +148,7 @@ class MobileNetV1SSD:
             scheduler.step()
 
             if (epoch % validation_epochs == 0) or (epoch == num_epochs - 1):
-                val_loss, val_regression_loss, val_classification_loss = self.test(val_loader, criterion, device)
+                val_loss, val_regression_loss, val_classification_loss = self.eval(val_loader, criterion, device)
                 logger.info(
                     f"Epoch: {epoch}, " +
                     f"Validation Loss: {val_loss:.4f}, " +
@@ -180,7 +160,7 @@ class MobileNetV1SSD:
 
                 logger.info(f"Saved model {model_path}")
 
-    def test(self, loader, criterion, device):
+    def eval(self, loader, criterion, device):
         self.net.eval()
         running_loss = 0.0
         running_regression_loss = 0.0
