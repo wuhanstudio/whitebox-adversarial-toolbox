@@ -1,4 +1,4 @@
-pytest
+pytest,
 numpy>=1.18.0,
 tqdm,
 six,
