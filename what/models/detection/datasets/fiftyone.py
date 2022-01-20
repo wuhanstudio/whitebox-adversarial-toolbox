@@ -30,8 +30,8 @@ class FiftyOneDataset(torch.utils.data.Dataset):
 
         self.classes = classes
 
-        if self.classes[0] != "background":
-            self.classes = ["background"] + self.classes
+        if self.classes[0] not in ["BACKGROUND", "background"]:
+            self.classes = ["BACKGROUND"] + self.classes
 
         self.labels_map_rev = {c: i for i, c in enumerate(self.classes)}
 
@@ -54,6 +54,11 @@ class FiftyOneDataset(torch.utils.data.Dataset):
         boxes = np.array(boxes, dtype=np.float32)
         labels = np.array(labels, dtype=np.int64)
 
+        # Background
+        if len(boxes) == 0:
+            boxes = np.array([[0, 0, img.shape[1], img.shape[0]]], dtype=np.float32)
+            labels = np.array([0], dtype=np.int64)
+    
         if self.transform:
             img, boxes, labels = self.transform(img, boxes, labels)
         if self.target_transform:
