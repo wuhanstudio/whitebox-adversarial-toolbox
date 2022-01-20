@@ -84,7 +84,7 @@ if __name__ == '__main__':
     logger.info("validation dataset size: {}".format(len(val_dataset)))
 
     # Create SSD network and load pretrained base net.
-    model = MobileNetV2SSDLite(is_test=False)
+    model = MobileNetV2SSDLite(is_test=False, class_names=train_dataset.classes)
 
     model.train(train_loader, val_loader, device=device, num_epochs=5, debug_steps=10, validation_epochs=1,
                 freeze_base_net = args.freeze_base_net, freeze_net = args.freeze_net,
