@@ -15,7 +15,7 @@ logger = log.get_logger(__name__)
 from what.models.detection.datasets.voc import VOC_CLASS_NAMES
 
 class MobileNetV2SSDLite:
-    def __init__(self, class_names = None, model_path = None, pretrained = None, width_mult = 1.0, is_test=False):
+    def __init__(self, class_names = None, model_path = None, pretrained = None, width_mult = 1.0, is_test=False, device=None):
 
         if class_names is None:
             self.class_names = VOC_CLASS_NAMES
@@ -28,6 +28,7 @@ class MobileNetV2SSDLite:
             pretrained = False
 
         self.predictor = None;
+        self.device = device;
 
         if pretrained is True:
             self.net.load("https://storage.googleapis.com/models-hao/mb2-ssd-lite-mp-0_686.pth", pretrained=True)
@@ -36,7 +37,7 @@ class MobileNetV2SSDLite:
 
     def predict(self, image, top_k=-1, prob_threshold=None):
         if self.predictor is None:
-            self.predictor = create_mobilenetv2_ssd_lite_predictor(self.net, candidate_size=200)
+            self.predictor = create_mobilenetv2_ssd_lite_predictor(self.net, candidate_size=200, device=self.device)
 
         return self.predictor.predict(image, top_k, prob_threshold)
 

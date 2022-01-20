@@ -11,6 +11,7 @@ from torch.utils.model_zoo import load_url as load_state_dict_from_url
 from ..utils import box_utils
 
 from collections import namedtuple
+
 GraphPath = namedtuple("GraphPath", ['s0', 'name', 's1'])  #
 
 class SSD(nn.Module):
@@ -94,7 +95,7 @@ class SSD(nn.Module):
         if self.is_test:
             confidences = F.softmax(confidences, dim=2)
             boxes = box_utils.convert_locations_to_boxes(
-                locations, self.priors, self.config.center_variance, self.config.size_variance
+                locations.to(self.device), self.priors.to(self.device), self.config.center_variance, self.config.size_variance
             )
             boxes = box_utils.center_form_to_corner_form(boxes)
             return confidences, boxes
