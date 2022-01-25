@@ -1,16 +1,13 @@
-from typing import List, Tuple
-
 import numpy as np
+from typing import List, Tuple
+from collections import namedtuple
 
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-
 from torch.utils.model_zoo import load_url as load_state_dict_from_url
 
 from ..utils import box_utils
-
-from collections import namedtuple
 
 GraphPath = namedtuple("GraphPath", ['s0', 'name', 's1'])  #
 
@@ -91,7 +88,7 @@ class SSD(nn.Module):
 
         confidences = torch.cat(confidences, 1)
         locations = torch.cat(locations, 1)
-        
+
         if self.is_test:
             confidences = F.softmax(confidences, dim=2)
             boxes = box_utils.convert_locations_to_boxes(
@@ -113,10 +110,21 @@ class SSD(nn.Module):
 
         return confidence, location
 
-    def init_from_base_net(self, model):
-        self.base_net.load_state_dict(torch.load(model, map_location=lambda storage, loc: storage), strict=True)
+    def init(self):
+        self.base_net.apply(_xavier_init_)
+
         self.source_layer_add_ons.apply(_xavier_init_)
         self.extras.apply(_xavier_init_)
+
+        self.classification_headers.apply(_xavier_init_)
+        self.regression_headers.apply(_xavier_init_)
+
+    def init_from_base_net(self, model):
+        self.base_net.load_state_dict(torch.load(model, map_location=lambda storage, loc: storage), strict=True)
+
+        self.source_layer_add_ons.apply(_xavier_init_)
+        self.extras.apply(_xavier_init_)
+
         self.classification_headers.apply(_xavier_init_)
         self.regression_headers.apply(_xavier_init_)
 
@@ -126,13 +134,7 @@ class SSD(nn.Module):
         model_dict = self.state_dict()
         model_dict.update(state_dict)
         self.load_state_dict(model_dict)
-        self.classification_headers.apply(_xavier_init_)
-        self.regression_headers.apply(_xavier_init_)
 
-    def init(self):
-        self.base_net.apply(_xavier_init_)
-        self.source_layer_add_ons.apply(_xavier_init_)
-        self.extras.apply(_xavier_init_)
         self.classification_headers.apply(_xavier_init_)
         self.regression_headers.apply(_xavier_init_)
 
@@ -145,6 +147,7 @@ class SSD(nn.Module):
 
     def save(self, model_path):
         torch.save(self.state_dict(), model_path)
+
 
 class MatchPrior(object):
     def __init__(self, center_form_priors, center_variance, size_variance, iou_threshold):

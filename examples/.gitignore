@@ -2,3 +2,4 @@ VOC2007/
 VOC2012/
 models/
 *.pth
+*.mp4

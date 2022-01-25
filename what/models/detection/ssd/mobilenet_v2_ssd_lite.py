@@ -4,11 +4,12 @@ import what.utils.logger as log
 
 import torch
 from torch.optim.lr_scheduler import CosineAnnealingLR
-from what.models.detection.ssd.nn.multibox_loss import MultiboxLoss
-from what.models.detection.ssd.utils.misc import freeze_net_layers
 
-from what.models.detection.ssd.ssd import mobilenetv1_ssd_config
-from what.models.detection.ssd.ssd.mobilenet_v2_ssd_lite import create_mobilenetv2_ssd_lite, create_mobilenetv2_ssd_lite_predictor
+from .ssd.multibox_loss import MultiboxLoss
+from .utils.misc import freeze_net_layers
+
+from .ssd import mobilenet_ssd_config
+from .ssd.mobilenet_v2_ssd_lite_create import create_mobilenet_v2_ssd_lite, create_mobilenet_v2_ssd_lite_predictor
 
 logger = log.get_logger(__name__)
 
@@ -22,7 +23,7 @@ class MobileNetV2SSDLite:
         else:
             self.class_names = class_names
 
-        self.net = create_mobilenetv2_ssd_lite(len(self.class_names), is_test=is_test, width_mult=width_mult)
+        self.net = create_mobilenet_v2_ssd_lite(len(self.class_names), is_test=is_test, width_mult=width_mult)
 
         if model_path is not None:
             pretrained = False
@@ -37,7 +38,7 @@ class MobileNetV2SSDLite:
 
     def predict(self, image, top_k=-1, prob_threshold=None):
         if self.predictor is None:
-            self.predictor = create_mobilenetv2_ssd_lite_predictor(self.net, candidate_size=200, device=self.device)
+            self.predictor = create_mobilenet_v2_ssd_lite_predictor(self.net, candidate_size=200, device=self.device)
 
         return self.predictor.predict(image, top_k, prob_threshold)
 
@@ -132,7 +133,7 @@ class MobileNetV2SSDLite:
         self.net.to(device)
 
         if criterion is None:
-            criterion = MultiboxLoss(mobilenetv1_ssd_config.priors, iou_threshold=0.5, neg_pos_ratio=3,
+            criterion = MultiboxLoss(mobilenet_ssd_config.priors, iou_threshold=0.5, neg_pos_ratio=3,
                                     center_variance=0.1, size_variance=0.2, device=device)
         if optimizer is None:
             optimizer = torch.optim.SGD(params, lr=lr, momentum=momentum,

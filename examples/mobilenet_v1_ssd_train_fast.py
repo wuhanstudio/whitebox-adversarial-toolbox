@@ -9,7 +9,7 @@ from what.models.detection.datasets.voc import VOCDataset
 
 from what.models.detection.ssd.ssd.ssd import MatchPrior
 from what.models.detection.ssd.ssd.preprocessing import TrainAugmentation, TestTransform
-from what.models.detection.ssd.ssd import mobilenetv1_ssd_config
+from what.models.detection.ssd.ssd import mobilenet_ssd_config
 
 from what.models.detection.ssd.mobilenet_v1_ssd import MobileNetV1SSD
 
@@ -29,7 +29,7 @@ if __name__ == '__main__':
     num_workers = 0
 
     # Load MobileNetSSD configuration
-    config              = mobilenetv1_ssd_config
+    config              = mobilenet_ssd_config
     train_transform     = TrainAugmentation(config.image_size, config.image_mean, config.image_std)
     target_transform    = MatchPrior(config.priors, config.center_variance, config.size_variance, 0.5)
     test_transform      = TestTransform(config.image_size, config.image_mean, config.image_std)

@@ -2,6 +2,7 @@ import torch
 
 from ..utils import box_utils
 from .preprocessing import PredictionTransform
+
 from what.models.detection.utils.time_utils import Timer
 
 class Predictor:

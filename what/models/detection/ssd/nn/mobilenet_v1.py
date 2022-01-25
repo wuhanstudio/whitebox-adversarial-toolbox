@@ -8,21 +8,21 @@ class MobileNetV1(nn.Module):
     def __init__(self, num_classes=1024):
         super(MobileNetV1, self).__init__()
 
-        def conv_bn(inp, oup, stride):
+        def conv_bn(in_channels, out_channels, stride):
             return nn.Sequential(
-                nn.Conv2d(inp, oup, 3, stride, 1, bias=False),
-                nn.BatchNorm2d(oup),
+                nn.Conv2d(in_channels, out_channels, 3, stride, 1, bias=False),
+                nn.BatchNorm2d(out_channels),
                 nn.ReLU(inplace=True)
             )
 
-        def conv_dw(inp, oup, stride):
+        def conv_dw(in_channels, out_channels, stride):
             return nn.Sequential(
-                nn.Conv2d(inp, inp, 3, stride, 1, groups=inp, bias=False),
-                nn.BatchNorm2d(inp),
+                nn.Conv2d(in_channels, in_channels, 3, stride, 1, groups=in_channels, bias=False),
+                nn.BatchNorm2d(in_channels),
                 nn.ReLU(inplace=True),
 
-                nn.Conv2d(inp, oup, 1, 1, 0, bias=False),
-                nn.BatchNorm2d(oup),
+                nn.Conv2d(in_channels, out_channels, 1, 1, 0, bias=False),
+                nn.BatchNorm2d(out_channels),
                 nn.ReLU(inplace=True),
             )
 

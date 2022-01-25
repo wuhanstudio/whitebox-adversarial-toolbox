@@ -32,6 +32,7 @@ def jaccard_numpy(box_a, box_b):
     union = area_a + area_b - inter
     return inter / union  # [A,B]
 
+
 class Compose(object):
     """Composes several augmentations together.
     Args:

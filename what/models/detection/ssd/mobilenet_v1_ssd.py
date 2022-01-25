@@ -4,11 +4,11 @@ import what.utils.logger as log
 
 import torch
 from torch.optim.lr_scheduler import CosineAnnealingLR
-from what.models.detection.ssd.nn.multibox_loss import MultiboxLoss
-from what.models.detection.ssd.utils.misc import freeze_net_layers
+from .ssd.multibox_loss import MultiboxLoss
+from .utils.misc import freeze_net_layers
 
-from what.models.detection.ssd.ssd.mobilenetv1_ssd import create_mobilenetv1_ssd, create_mobilenetv1_ssd_predictor
-from what.models.detection.ssd.ssd import mobilenetv1_ssd_config
+from .ssd.mobilenet_v1_ssd_create import create_mobilenet_v1_ssd, create_mobilenet_v1_ssd_predictor
+from .ssd import mobilenet_ssd_config
 
 from what.models.detection.datasets.voc import VOC_CLASS_NAMES
 
@@ -22,7 +22,7 @@ class MobileNetV1SSD:
         else:
             self.class_names = class_names
 
-        self.net = create_mobilenetv1_ssd(len(self.class_names), is_test=is_test)
+        self.net = create_mobilenet_v1_ssd(len(self.class_names), is_test=is_test)
 
         if model_path is not None:
             pretrained = False
@@ -37,7 +37,7 @@ class MobileNetV1SSD:
 
     def predict(self, image, top_k=-1, prob_threshold=None):
         if self.predictor is None:
-            self.predictor = create_mobilenetv1_ssd_predictor(self.net, device=self.device, candidate_size=200)
+            self.predictor = create_mobilenet_v1_ssd_predictor(self.net, device=self.device, candidate_size=200)
 
         return self.predictor.predict(image, top_k, prob_threshold)
 
@@ -132,7 +132,7 @@ class MobileNetV1SSD:
         self.net.to(device)
 
         if criterion is None:
-            criterion = MultiboxLoss(mobilenetv1_ssd_config.priors, iou_threshold=0.5, neg_pos_ratio=3,
+            criterion = MultiboxLoss(mobilenet_ssd_config.priors, iou_threshold=0.5, neg_pos_ratio=3,
                                     center_variance=0.1, size_variance=0.2, device=device)
         if optimizer is None:
             optimizer = torch.optim.SGD(params, lr=lr, momentum=momentum,
