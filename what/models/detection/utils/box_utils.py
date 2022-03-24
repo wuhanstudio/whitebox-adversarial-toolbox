@@ -8,7 +8,7 @@ def draw_bounding_boxes(image, boxes, labels, class_names, probs):
     for i in range(boxes.shape[0]):
         box = boxes[i]
         label = f"{class_names[labels[i]]}: {probs[i]:.2f}"
-        print(label)
+        # print(label)
 
         # Draw bounding boxes
         cv2.rectangle(image, (int(box[0].item()), int(box[1].item())), (int(box[2].item()), int(box[3].item())), (255, 255, 0), 4)
