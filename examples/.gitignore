@@ -3,3 +3,5 @@ VOC2012/
 models/
 *.pth
 *.mp4
+*.avi
+*.npy
