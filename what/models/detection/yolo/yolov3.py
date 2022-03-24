@@ -23,20 +23,4 @@ class YOLOV3:
 
         boxes, class_ids, confidences = yolo_process_output(outs, yolov3_anchors, len(self.class_names))
 
-        # (x, y, w, h) --> (x1, y1, x2, y2)
-        height, width, _ = image.shape
-        for box in boxes:
-            box[0] *= width
-            box[1] *= height
-            box[2] *= width 
-            box[3] *= height
-
-            # From center to top left
-            box[0] -= box[2] / 2
-            box[1] -= box[3] / 2
-
-            # From width and height to x2 and y2
-            box[2] += box[0]
-            box[3] += box[1]
-
         return input_cv_image, boxes, class_ids, confidences
