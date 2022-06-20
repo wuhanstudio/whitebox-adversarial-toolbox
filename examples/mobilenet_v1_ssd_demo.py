@@ -8,8 +8,8 @@ device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 # Capture from camera
 cap = cv2.VideoCapture(0)
-cap.set(3, 1920)
-cap.set(4, 1080)
+#cap.set(3, 1920)
+#cap.set(4, 1080)
 
 # Initialize the model
 if len(sys.argv) == 2:
@@ -30,6 +30,8 @@ while True:
     image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
 
     # Draw bounding boxes onto the image
+    height, width, _ = image.shape
+
     output = draw_bounding_boxes(image, boxes, labels, model.class_names, probs);
 
     cv2.imshow('MobileNetv1 SSD', output)

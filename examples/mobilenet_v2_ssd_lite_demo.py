@@ -8,8 +8,8 @@ device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 # Capture from camera
 cap = cv2.VideoCapture(0)
-cap.set(3, 1920)
-cap.set(4, 1080)
+#cap.set(3, 1920)
+#cap.set(4, 1080)
 
 # Initialize the model
 if len(sys.argv) == 2:
