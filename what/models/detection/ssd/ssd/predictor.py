@@ -65,8 +65,13 @@ class Predictor:
         if not picked_box_probs:
             return torch.tensor([]), torch.tensor([]), torch.tensor([]), torch.tensor([])
         picked_box_probs = torch.cat(picked_box_probs)
-        picked_box_probs[:, 0] *= width
-        picked_box_probs[:, 1] *= height
-        picked_box_probs[:, 2] *= width
-        picked_box_probs[:, 3] *= height
+
+        # (x1, y1, x2, y2) --> (c1, c2, w, h) (0.0, 1.0)
+        box_w  = picked_box_probs[:, 2] - picked_box_probs[:, 0]
+        box_h = picked_box_probs[:, 3] - picked_box_probs[:, 1]
+        picked_box_probs[:, 0] += box_w / 2
+        picked_box_probs[:, 1] += box_h / 2
+        picked_box_probs[:, 2] = box_w
+        picked_box_probs[:, 3] = box_h
+
         return images, picked_box_probs[:, :4], torch.tensor(picked_labels), picked_box_probs[:, 4]
