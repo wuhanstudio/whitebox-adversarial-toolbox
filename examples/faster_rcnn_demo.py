@@ -10,8 +10,8 @@ from what.models.detection.datasets.voc import VOC_CLASS_NAMES
 
 # Capture from camera
 cap = cv2.VideoCapture(0)
-cap.set(3, 1920)
-cap.set(4, 1080)
+#cap.set(3, 1920)
+#cap.set(4, 1080)
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
@@ -22,6 +22,8 @@ while True:
 
     # Image preprocessing
     input = cv2.cvtColor(orig_image, cv2.COLOR_BGR2RGB)
+    height, width, _ = input.shape
+
     # NHWC -> NCHW
     input = np.array(input).transpose((2, 0, 1))
     input = torch.from_numpy(input)[None]
@@ -36,8 +38,19 @@ while True:
 
     inputs, boxes, labels, scores = model.predict(input)
 
+    # (x1, y1, x2, y2) --> (c1, c2, w, h) (0.0, 1.0)
+    boxes = np.array(boxes)[0]
+    box_w  = boxes[:, 2] - boxes[:, 0]
+    box_h = boxes[:, 3] - boxes[:, 1]
+    boxes[:, 0] += box_w / 2
+    boxes[:, 0] /= width
+    boxes[:, 1] += box_h / 2
+    boxes[:, 1] /= height
+    boxes[:, 2] = box_w / width
+    boxes[:, 3] = box_h / height
+
     output = draw_bounding_boxes(orig_image,
-            boxes[0],
+            boxes,
             labels[0],
             VOC_CLASS_NAMES[1:],
             scores[0])

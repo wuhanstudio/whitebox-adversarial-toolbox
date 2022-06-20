@@ -6,8 +6,8 @@ from what.models.detection.yolo.yolov3_tiny import YOLOV3_TINY
 
 # Capture from camera
 cap = cv2.VideoCapture(0)
-cap.set(3, 1920)
-cap.set(4, 1080)
+#cap.set(3, 1920)
+#cap.set(4, 1080)
 
 # MobileNet
 model = YOLOV3_TINY(COCO_CLASS_NAMES, "models/tiny_yolo3_mobilenet_lite_416_coco.h5")

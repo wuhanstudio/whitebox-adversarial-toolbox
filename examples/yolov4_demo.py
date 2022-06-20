@@ -6,8 +6,8 @@ from what.models.detection.yolo.yolov4 import YOLOV4
 
 # Capture from camera
 cap = cv2.VideoCapture(0)
-cap.set(3, 1920)
-cap.set(4, 1080)
+#cap.set(3, 1920)
+#cap.set(4, 1080)
 
 # Darknet
 model = YOLOV4(COCO_CLASS_NAMES, "models/yolov4.h5")
