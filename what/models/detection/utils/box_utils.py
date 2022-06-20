@@ -1,8 +1,11 @@
 import cv2
+import numpy as np
+from .array_utils import to_numpy
 
 def draw_bounding_boxes(image, boxes, labels, class_names, probs):
     if len(boxes) > 0:
         assert(boxes.shape[1] == 4)
+        boxes = to_numpy(boxes)
 
     # (x, y, w, h) --> (x1, y1, x2, y2)
     height, width, _ = image.shape
