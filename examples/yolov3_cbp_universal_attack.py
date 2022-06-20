@@ -1,5 +1,4 @@
 import cv2
-import time
 import random
 import numpy as np
 
@@ -52,7 +51,7 @@ if __name__ == '__main__':
     # Read video frames
     input_video = []
 
-    cap = cv2.VideoCapture('examples/demo.mp4')
+    cap = cv2.VideoCapture('demo.mp4')
     success, image = cap.read()
     while success:
         input_video.append(image)
@@ -60,7 +59,7 @@ if __name__ == '__main__':
     cap.release()
 
     # Read class names
-    with open("examples/models/coco_classes.txt") as f:
+    with open("models/coco_classes.txt") as f:
         content = f.readlines()
     classes = [x.strip() for x in content] 
 
@@ -71,7 +70,7 @@ if __name__ == '__main__':
     x_train = np.array(input_video[:int(len(input_video) * 0.9)])
     x_test = np.array(input_video[int(len(input_video) * 0.9):])
 
-    attack = CBPAttack("examples/models/yolov3.h5", "multi_untargeted", False, classes)
+    attack = CBPAttack("models/yolov3.h5", "multi_untargeted", False, classes)
     attack.fixed = False
 
     fourcc = cv2.VideoWriter_fourcc(*'XVID')
@@ -92,34 +91,13 @@ if __name__ == '__main__':
 
             input_cv_image = np.array(input_cv_image).astype(np.float32) / 255.0
 
-            start_time = int(time.time() * 1000)
-
             # Yolo inference
             # outs = model.predict(np.array([input_cv_image]))
             input_cv_image, outs = attack.attack(input_cv_image)
 
             boxes, labels, probs = yolo_process_output(outs, yolov3_anchors, len(classes))
 
-            # (x, y, w, h) --> (x1, y1, x2, y2)
             height, width, _ = origin_cv_image.shape
-            for box in boxes:
-                box[0] *= width
-                box[1] *= height
-                box[2] *= width 
-                box[3] *= height
-
-                # From center to top left
-                box[0] -= box[2] / 2
-                box[1] -= box[3] / 2
-
-                # From width and height to x2 and y2
-                box[2] += box[0]
-                box[3] += box[1]
-
-            # Calculate FPS
-            elapsed_time = int(time.time()*1000) - start_time
-            fps = 1000 / elapsed_time
-            print ("fps: ", str(round(fps, 2)))
 
             # Draw bounding boxes
             origin_cv_image = cv2.cvtColor(origin_cv_image, cv2.COLOR_RGB2BGR)
@@ -147,4 +125,6 @@ if __name__ == '__main__':
                 break
 
     out.release()
-    np.save('examples/noise.npy', attack.noise)
+
+    print("Perturbation saved to noise.npy")
+    np.save('noise.npy', attack.noise)
