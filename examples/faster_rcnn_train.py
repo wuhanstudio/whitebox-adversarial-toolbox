@@ -51,7 +51,7 @@ if __name__ == '__main__':
                               num_workers=num_workers,
                               shuffle=True)
 
-    logger.info("Train dataset size: {}".format(len(train_dataset)))
+    logger.info(f"Train dataset size: {len(train_dataset)}")
 
     # Load Validation Dataset from FiftyOne (use voc-2007 train as validation here)
     val_dataset  = FiftyOneDataset(foz.load_zoo_dataset("voc-2007", split="train"), 
@@ -67,7 +67,7 @@ if __name__ == '__main__':
                             num_workers=num_workers,
                             shuffle=False)
 
-    logger.info("validation dataset size: {}".format(len(val_dataset)))
+    logger.info(f"validation dataset size: {len(val_dataset)}")
 
     # dataset = Dataset(opt)
     # dataloader = data_.DataLoader(dataset, \
@@ -87,7 +87,7 @@ if __name__ == '__main__':
 
     if opt.load_path:
         model.load(opt.load_path)
-        print('load pretrained model from %s' % opt.load_path)
+        logger.info(f'load pretrained model from {opt.load_path}')
 
     # trainer.vis.text(dataset.db.label_names, win='labels')
     best_map = 0
@@ -101,4 +101,4 @@ if __name__ == '__main__':
     eval_result = model.eval(val_loader, test_num=1e100)
     model.save(mAP=eval_result['map'])
 
-    print('eval_result')
+    logger.info('eval_result')
