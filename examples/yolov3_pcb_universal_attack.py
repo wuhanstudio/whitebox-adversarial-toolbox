@@ -8,7 +8,7 @@ from what.models.detection.utils.box_utils import draw_bounding_boxes
 from what.models.detection.yolo.yolov3 import YOLOV3
 from what.models.detection.yolo.utils.yolo_utils import yolo_process_output, yolov3_anchors
 
-from what.attacks.detection.yolo.CBP import CBPAttack
+from what.attacks.detection.yolo.PCB import PCBAttack
 
 logger = log.get_logger(__name__)
 
@@ -70,7 +70,7 @@ if __name__ == '__main__':
     x_train = np.array(input_video[:int(len(input_video) * 0.9)])
     x_test = np.array(input_video[int(len(input_video) * 0.9):])
 
-    attack = CBPAttack("models/yolov3.h5", "multi_untargeted", False, classes)
+    attack = PCBAttack("models/yolov3.h5", "multi_untargeted", False, classes)
     attack.fixed = False
 
     fourcc = cv2.VideoWriter_fourcc(*'XVID')

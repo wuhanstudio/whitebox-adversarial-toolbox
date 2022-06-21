@@ -7,7 +7,7 @@ from what.models.detection.utils.box_utils import draw_bounding_boxes
 from what.models.detection.yolo.yolov3 import YOLOV3
 from what.models.detection.yolo.utils.yolo_utils import yolo_process_output, yolov3_anchors
 
-from what.attacks.detection.yolo.CBP import CBPAttack
+from what.attacks.detection.yolo.PCB import PCBAttack
 
 logger = log.get_logger(__name__)
 
@@ -57,7 +57,7 @@ if __name__ == '__main__':
     origin_cv_image = cv2.imread('demo.png')
     origin_cv_image = cv2.cvtColor(origin_cv_image, cv2.COLOR_BGR2RGB)
 
-    attack = CBPAttack("models/yolov3.h5", "multi_untargeted", False, classes)
+    attack = PCBAttack("models/yolov3.h5", "multi_untargeted", False, classes)
     attack.fixed = False
 
     for n in range(20):
@@ -69,13 +69,9 @@ if __name__ == '__main__':
         input_cv_image = np.array(input_cv_image).astype(np.float32) / 255.0
 
         # Yolo inference
-        # outs = model.predict(np.array([input_cv_image]))
         input_cv_image, outs = attack.attack(input_cv_image)
 
         boxes, labels, probs = yolo_process_output(outs, yolov3_anchors, len(classes))
-
-        # (x, y, w, h) --> (x1, y1, x2, y2)
-        height, width, _ = origin_cv_image.shape
 
         # Draw bounding boxes
         out_img = cv2.cvtColor(origin_cv_image, cv2.COLOR_RGB2BGR)

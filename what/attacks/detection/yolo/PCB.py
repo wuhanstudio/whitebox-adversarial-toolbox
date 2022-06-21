@@ -7,7 +7,7 @@ import tensorflow as tf
 tf.compat.v1.disable_eager_execution()
 import keras.backend as K
 
-class CBPAttack:
+class PCBAttack:
     def __init__(self, model, attack_type, monochrome, classes):
         self.classes = len(classes)
         self.epsilon = 1
@@ -27,8 +27,9 @@ class CBPAttack:
         self.model.summary()
         self.attack_type = attack_type
 
-        self.delta = None
-        loss = None
+        self.delta = 0
+        loss = 0
+
         for out in self.model.output:
             # Targeted One Box
             if attack_type == "one_targeted":
@@ -40,21 +41,8 @@ class CBPAttack:
 
             # Untargeted Multi boxes
             if attack_type == "multi_untargeted":
-                # loss = tf.reduce_sum(K.sigmoid(K.reshape(out, (-1, 5 + self.classes))[:, 5:]))
                 for i in range(0, self.classes):
-                    if loss == None:
-                        loss = tf.reduce_sum(K.sigmoid(K.reshape(out, (-1, 5 + self.classes))[:, 4]) * K.sigmoid(K.reshape(out, (-1, 5 + self.classes))[:, i+5]))
-                    else:
-                        loss = loss + tf.reduce_sum(K.sigmoid(K.reshape(out, (-1, 5 + self.classes))[:, 4]) * K.sigmoid(K.reshape(out, (-1, 5 + self.classes))[:, i+5]))
-
-            grads = K.gradients(-loss, self.model.input)
-            if self.delta == None:
-                self.delta =  K.sign(grads[0])
-            else:
-                self.delta = self.delta + K.sign(grads[0])
-
-        # Store current patches
-        self.patches = []
+                    loss = loss + tf.reduce_sum(K.sigmoid(K.reshape(out, (-1, 5 + self.classes))[:, 4]) * K.sigmoid(K.reshape(out, (-1, 5 + self.classes))[:, i+5]))
 
         # loss = K.sum(K.abs((self.model.input-K.mean(self.model.input))))
 
@@ -64,7 +52,7 @@ class CBPAttack:
         # Mirror
         # loss = - 0.01 * tf.reduce_sum(tf.image.total_variation(self.model.input)) - 0.01 * tf.reduce_sum(K.abs(self.model.input - tf.image.flip_left_right(self.model.input)))
 
-        grads = K.gradients(-loss, self.model.input)
+        grads = K.gradients(loss, self.model.input)
         self.delta = self.delta + K.sign(grads[0])
 
         self.sess = tf.compat.v1.keras.backend.get_session()
@@ -86,25 +74,18 @@ class CBPAttack:
     def attack(self, input_cv_image):
         with self.graph.as_default():
             # Draw each adversarial patch on the input image
-            if self.monochrome:
-                input_cv_image[:, :, 0] = input_cv_image[:, :, 0] + self.noise
-                input_cv_image[:, :, 1] = input_cv_image[:, :, 0] + self.noise
-                input_cv_image[:, :, 2] = input_cv_image[:, :, 0] + self.noise
-            else:
-                input_cv_image = input_cv_image + self.noise
+            input_cv_image = input_cv_image + self.noise
+            input_cv_image = np.clip(input_cv_image, 0.0, 1.0).astype(np.float32)
 
             if not self.fixed:
-                grads = self.sess.run(self.delta, feed_dict={self.model.input:np.array([input_cv_image])}) / 255.0
-                if self.monochrome:
-                    # For monochrome images, we average the gradients over RGB channels
-                    self.noise = self.noise + 0.01 / 3 * (grads[0, :, :, 0] + grads[0, :, :, 1] + grads[0, :, :, 2])
-                else:
-                    self.noise = self.noise + 0.01 * grads[0, :, :, :]
+                outputs, grads = self.sess.run([self.model.output, self.delta], feed_dict={self.model.input:np.array([input_cv_image])})
+
+                self.noise = self.noise + 2 / 255.0 * grads[0, :, :, :]
 
                 self.noise = np.clip(self.noise, -1.0, 1.0)
 
-                self.noise = self.proj_lp(self.noise, xi=0.04, p = np.inf)
+                self.noise = self.proj_lp(self.noise, xi=8/255.0, p = np.inf)
+            else:
+                outputs = self.sess.run(self.model.output, feed_dict={self.model.input:np.array([input_cv_image])})
 
-            input_cv_image = np.clip(input_cv_image, 0.0, 1.0).astype(np.float32)
-
-            return input_cv_image, self.sess.run(self.model.output, feed_dict={self.model.input:np.array([input_cv_image])})
+            return input_cv_image, outputs
