@@ -4,11 +4,13 @@ import numpy as np
 from what.models.detection.datasets.coco import COCO_CLASS_NAMES
 from what.models.detection.utils.box_utils import draw_bounding_boxes
 from what.models.detection.yolo.yolov3 import YOLOV3
-from what.models.detection.yolo.utils.yolo_utils import yolo_process_output, yolov3_anchors
+from what.models.detection.yolo.utils.yolo_utils import yolo_process_output, yolov3_anchors, yolov3_tiny_anchors
 
 from what.attacks.detection.yolo.PCB import PCBAttack
 from what.utils.resize import bilinear_resize
 import what.utils.logger as log
+
+n_iteration = 50
 
 logger = log.get_logger(__name__)
 
@@ -23,10 +25,10 @@ if __name__ == '__main__':
     origin_cv_image = cv2.imread('demo.png')
     origin_cv_image = cv2.cvtColor(origin_cv_image, cv2.COLOR_BGR2RGB)
 
-    attack = PCBAttack("models/yolov3.h5", "multi_untargeted", False, classes)
+    attack = PCBAttack("models/yolov3-tiny.h5", "multi_untargeted", classes)
     attack.fixed = False
 
-    for n in range(20):
+    for n in range(n_iteration):
         logger.info(f"Iteration: {n}")
 
         # For YOLO, the input pixel values are normalized to [0, 1]
@@ -36,7 +38,7 @@ if __name__ == '__main__':
         # Yolo inference
         input_cv_image, outs = attack.attack(input_cv_image)
 
-        boxes, labels, probs = yolo_process_output(outs, yolov3_anchors, len(classes))
+        boxes, labels, probs = yolo_process_output(outs, yolov3_tiny_anchors, len(classes))
 
         # Draw bounding boxes
         out_img = cv2.cvtColor(origin_cv_image, cv2.COLOR_RGB2BGR)
