@@ -10,17 +10,14 @@ import keras.backend as K
 from what.utils.proj_lp import proj_lp
 
 class PCBAttack:
-    def __init__(self, model, attack_type, monochrome, classes):
+    def __init__(self, model, attack_type, classes):
         self.classes = len(classes)
         self.epsilon = 1
         self.graph = tf.compat.v1.get_default_graph()
-        self.monochrome = monochrome
         self.use_filter = False
 
-        if self.monochrome:
-            self.noise = np.zeros((416, 416))
-        else:
-            self.noise = np.zeros((416, 416, 3))
+        self.noise = np.zeros((416, 416, 3))
+        # self.noise = np.random.uniform( -2 / 255.0, 2 / 255.0, size=(416, 416, 3))
 
         self.adv_patch_boxes = []
         self.fixed = True
@@ -29,22 +26,29 @@ class PCBAttack:
         self.model.summary()
         self.attack_type = attack_type
 
+        self.lr = 4 / 255.0
         self.delta = 0
         loss = 0
 
         for out in self.model.output:
+            out = K.reshape(out, (-1, 5 + self.classes))
             # Targeted One Box
             if attack_type == "one_targeted":
-                loss = K.max(K.sigmoid(K.reshape(out, (-1, 5 + self.classes))[:, 4]) * K.sigmoid(K.reshape(out, (-1, 5 + self.classes))[:, 5]))
+                loss = K.max(K.sigmoid(out[:, 4]) * K.sigmoid(out[:, 5]))
 
             # Targeted Multi boxes
             if attack_type == "multi_targeted":
-                loss = K.sigmoid(K.reshape(out, (-1, 5 + self.classes))[:, 4]) * K.sigmoid(K.reshape(out, (-1, 5 + self.classes))[:, 5])
+                loss = K.sigmoid(out[:, 4]) * K.sigmoid(out[:, 5])
 
             # Untargeted Multi boxes
             if attack_type == "multi_untargeted":
                 for i in range(0, self.classes):
-                    loss = loss + tf.reduce_sum(K.sigmoid(K.reshape(out, (-1, 5 + self.classes))[:, 4]) * K.sigmoid(K.reshape(out, (-1, 5 + self.classes))[:, i+5]))
+                    loss = loss + tf.reduce_sum( K.sigmoid(out[:, 4]) * K.sigmoid(out[:, i+5]))
+
+                    # loss = loss + tf.reduce_sum( K.sigmoid(out[:, 4]) * K.sigmoid(out[:, i+5]) / K.pow(K.sigmoid(out[:, 2]) * K.sigmoid(out[:, 3]), 2) )
+                    # loss = loss + tf.reduce_sum( K.sigmoid(out[:, 4]) * K.sigmoid(out[:, i+5])) / tf.reduce_sum(K.pow(K.sigmoid(out[:, 2]) * K.sigmoid(out[:, 3]), 2))
+
+                loss = loss / tf.reduce_sum(K.pow(K.sigmoid(out[:, 2]) * K.sigmoid(out[:, 3]), 2))
 
         grads = K.gradients(loss, self.model.input)
         self.delta = self.delta + K.sign(grads[0])
@@ -60,7 +64,8 @@ class PCBAttack:
             if not self.fixed:
                 outputs, grads = self.sess.run([self.model.output, self.delta], feed_dict={self.model.input:np.array([input_cv_image])})
 
-                self.noise = self.noise + 2 / 255.0 * grads[0, :, :, :]
+                self.noise = self.noise + self.lr * grads[0, :, :, :]
+                self.lr = self.lr * 0.98
 
                 self.noise = np.clip(self.noise, -1.0, 1.0)
 
