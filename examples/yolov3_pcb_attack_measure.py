@@ -15,25 +15,27 @@ from what.utils.logger import TensorBoardLogger
 
 n_iteration = 500
 
+prefix = './'
+
 # Logging
 logger = log.get_logger(__name__)
 
 # Tensorboard
-pcb_log_dir = './logs/pcb/' + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+pcb_log_dir = prefix + 'logs/pcb/' + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
 tb = TensorBoardLogger(pcb_log_dir)
 
 if __name__ == '__main__':
     # Read class names
-    with open("models/coco_classes.txt") as f:
+    with open(prefix + "models/coco_classes.txt") as f:
         content = f.readlines()
     classes = [x.strip() for x in content] 
 
     colors = np.random.uniform(0, 255, size=(len(classes), 3))
 
-    origin_cv_image = cv2.imread('demo.png')
+    origin_cv_image = cv2.imread(prefix + 'demo.png')
     origin_cv_image = cv2.cvtColor(origin_cv_image, cv2.COLOR_BGR2RGB)
 
-    attack = PCBAttack("models/yolov3-tiny.h5", "multi_untargeted", classes)
+    attack = PCBAttack(prefix + "models/yolov3-tiny.h5", "multi_untargeted", classes)
     attack.fixed = False
 
     last_outs = None
@@ -71,10 +73,15 @@ if __name__ == '__main__':
 
         if last_boxes is not None:
             # Eliminate the boxes with low confidence and overlaped boxes
-            indexes = cv2.dnn.NMSBoxes(np.vstack((boxes, last_boxes)), np.hstack((np.array(probs), np.array(last_probs))), 0.5, 0.4)
-            if len(indexes) > 0:
-                indexes = indexes.flatten()
-                tb.log_scalar('box variation', (len(indexes) - max(len(boxes), len(last_boxes))) / len(indexes), n)
+            if last_boxes.size > 0 and boxes.size > 0:
+                indexes = cv2.dnn.NMSBoxes(np.vstack((boxes, last_boxes)), np.hstack((np.array(probs), np.array(last_probs))), 0.5, 0.4)
+                if len(indexes) > 0:
+                    indexes = indexes.flatten()
+                    tb.log_scalar('box variation', (len(indexes) - max(len(boxes), len(last_boxes))) / len(indexes), n)
+            elif last_boxes.size == 0 and boxes.size == 0:
+                tb.log_scalar('box variation', 0.0, n)
+            else:
+                tb.log_scalar('box variation', 1.0, n)
         else:
             tb.log_scalar('box variation', 1.0, n)
 
@@ -108,4 +115,4 @@ if __name__ == '__main__':
             break
 
     logger.info("Perturbation saved to noise.npy")
-    np.save('noise.npy', attack.noise)
+    np.save(prefix + 'noise.npy', attack.noise)
