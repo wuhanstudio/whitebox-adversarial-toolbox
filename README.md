@@ -8,7 +8,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/whitebox-adversarial-toolbox)](https://pypi.org/project/whitebox-adversarial-toolbox/)
 
-A Python Library for Deep Learning Security that focuses on real-time white-box attacks.
+A Python Library for Deep Learning Security that focuses on Real-time White-box Attacks.
 
 ## Installation
 
