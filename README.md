@@ -16,4 +16,33 @@ A Python Library for Deep Learning Security that focuses on Real-time White-box 
 pip install whitebox-adversarial-toolbox
 ```
 
+## Usage (CLI)
+
+```
+Usage: what [OPTIONS] COMMAND [ARGS]...
+
+  The CLI tool for WHitebox-box Adversarial Toolbox (what).
+
+Options:
+  --help  Show this message and exit.
+
+Commands:
+  attack   Manage Attacks
+  example  Manage Examples
+```
+
+Useful commands:
+
+```
+# List supported models
+$ what model list
+
+# List supported Attacks
+$ what attack list
+
+
+# List available examples
+$ what example list
+```
+
 <h3> <a href="https://what.wuhanstudio.uk/"> Documentation </a>
