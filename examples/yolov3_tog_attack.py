@@ -22,7 +22,7 @@ if __name__ == '__main__':
 
     colors = np.random.uniform(0, 255, size=(len(classes), 3))
 
-    origin_cv_image = cv2.imread('demo.png')
+    origin_cv_image = cv2.imread('demo.jpg')
     origin_cv_image = cv2.cvtColor(origin_cv_image, cv2.COLOR_BGR2RGB)
 
     attack = TOGAttack("models/yolov3-tiny.h5", "multi_untargeted", classes)

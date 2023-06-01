@@ -2,6 +2,7 @@ VOC2007/
 VOC2012/
 models/
 logs/
+noise/
 *.pth
 *.avi
 *.npy
