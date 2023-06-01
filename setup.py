@@ -27,7 +27,8 @@ install_requires = [
     "torchvision",
     "opencv-python",
     "scikit-image",
-    "tensorflow"
+    "tensorflow",
+    "matplotlib"
 ]
 
 setuptools.setup(

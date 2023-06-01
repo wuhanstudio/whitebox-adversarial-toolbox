@@ -8,3 +8,4 @@ torchvision
 opencv-python
 scikit-image
 tensorflow
+matplotlib
