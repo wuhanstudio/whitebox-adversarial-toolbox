@@ -7,3 +7,4 @@ torch
 torchvision
 opencv-python
 scikit-image
+tensorflow

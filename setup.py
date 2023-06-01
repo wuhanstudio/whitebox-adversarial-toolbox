@@ -26,7 +26,8 @@ install_requires = [
     "torch",
     "torchvision",
     "opencv-python",
-    "scikit-image"
+    "scikit-image",
+    "tensorflow"
 ]
 
 setuptools.setup(
@@ -43,6 +44,7 @@ setuptools.setup(
     extra_require = {
         "dev": [
             "pytest>=3.6",
+            "pdoc"
         ]
     },
     packages=setuptools.find_packages(),
