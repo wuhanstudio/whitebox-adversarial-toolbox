@@ -28,6 +28,7 @@ install_requires = [
     "opencv-python",
     "scikit-image",
     "tensorflow",
+    "tensorrt",
     "matplotlib",
     "pandas",
     "click",
@@ -49,6 +50,11 @@ setuptools.setup(
             "pytest>=3.6",
             "pdoc"
         ]
+    },
+    entry_points={
+        'console_scripts': [
+            'what=what._main:main',
+        ],
     },
     packages=setuptools.find_packages(),
     long_description=long_description,
