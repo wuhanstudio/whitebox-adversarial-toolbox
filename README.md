@@ -29,6 +29,7 @@ Options:
 Commands:
   attack   Manage Attacks
   example  Manage Examples
+  model    Manage Deep Learning Models
 ```
 
 Useful commands:
@@ -39,7 +40,6 @@ $ what model list
 
 # List supported Attacks
 $ what attack list
-
 
 # List available examples
 $ what example list
