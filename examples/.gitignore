@@ -6,3 +6,4 @@ noise/
 *.pth
 *.avi
 *.npy
+*.png

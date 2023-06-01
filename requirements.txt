@@ -9,3 +9,4 @@ opencv-python
 scikit-image
 tensorflow
 matplotlib
+pandas

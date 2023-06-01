@@ -5,7 +5,7 @@ from ..nn.mobilenet_v3 import MobileNetV3_Large, MobileNetV3_Small, Block, hswis
 
 from .ssd import SSD
 from .predictor import Predictor
-from . import mobilenetv1_ssd_config as config
+from . import mobilenet_ssd_config as config
 
 
 def SeperableConv2d(in_channels, out_channels, kernel_size=1, stride=1, padding=0, onnx_compatible=False):

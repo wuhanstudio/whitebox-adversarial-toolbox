@@ -28,7 +28,9 @@ install_requires = [
     "opencv-python",
     "scikit-image",
     "tensorflow",
-    "matplotlib"
+    "matplotlib",
+    "pandas",
+    "click",
 ]
 
 setuptools.setup(
