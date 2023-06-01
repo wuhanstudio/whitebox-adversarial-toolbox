@@ -15,13 +15,13 @@ from what.utils.logger import TensorBoardLogger
 
 n_iteration = 500
 
-prefix = './'
+prefix = './examples/'
 
 # Logging
 logger = log.get_logger(__name__)
 
 # Tensorboard
-pcb_log_dir = prefix + 'logs/pcb/' + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+pcb_log_dir = prefix + 'logs/b/decay/0.99/' + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
 tb = TensorBoardLogger(pcb_log_dir)
 
 if __name__ == '__main__':
@@ -32,10 +32,10 @@ if __name__ == '__main__':
 
     colors = np.random.uniform(0, 255, size=(len(classes), 3))
 
-    origin_cv_image = cv2.imread(prefix + 'demo.png')
+    origin_cv_image = cv2.imread(prefix + 'demo.jpg')
     origin_cv_image = cv2.cvtColor(origin_cv_image, cv2.COLOR_BGR2RGB)
 
-    attack = PCBAttack(prefix + "models/yolov3-tiny.h5", "multi_untargeted", classes)
+    attack = PCBAttack(prefix + "models/yolov3-tiny.h5", "multi_untargeted", classes, decay=0.99)
     attack.fixed = False
 
     last_outs = None
@@ -74,10 +74,10 @@ if __name__ == '__main__':
         if last_boxes is not None:
             # Eliminate the boxes with low confidence and overlaped boxes
             if last_boxes.size > 0 and boxes.size > 0:
-                indexes = cv2.dnn.NMSBoxes(np.vstack((boxes, last_boxes)), np.hstack((np.array(probs), np.array(last_probs))), 0.5, 0.4)
+                indexes = cv2.dnn.NMSBoxes(np.vstack((boxes, last_boxes)).tolist(), np.hstack((np.array(probs), np.array(last_probs))), 0.5, 0.4)
                 if len(indexes) > 0:
                     indexes = indexes.flatten()
-                    tb.log_scalar('box variation', (len(indexes) - max(len(boxes), len(last_boxes))) / len(indexes), n)
+                    tb.log_scalar('box variation', (len(boxes) + len(last_boxes) - len(indexes)) / len(boxes), n)
             elif last_boxes.size == 0 and boxes.size == 0:
                 tb.log_scalar('box variation', 0.0, n)
             else:
@@ -85,8 +85,8 @@ if __name__ == '__main__':
         else:
             tb.log_scalar('box variation', 1.0, n)
 
-        last_boxes = boxes
-        last_probs = probs
+        last_boxes = np.copy(boxes)
+        last_probs = np.copy(probs)
 
         # Draw bounding boxes
         out_img = cv2.cvtColor(origin_cv_image, cv2.COLOR_RGB2BGR)
@@ -115,4 +115,4 @@ if __name__ == '__main__':
             break
 
     logger.info("Perturbation saved to noise.npy")
-    np.save(prefix + 'noise.npy', attack.noise)
+    np.save(prefix + 'noise/noise.npy', attack.noise)
