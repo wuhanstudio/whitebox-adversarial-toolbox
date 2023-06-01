@@ -10,14 +10,16 @@ import keras.backend as K
 from what.utils.proj_lp import proj_lp
 
 class TOGAttack:
-    def __init__(self, model, attack_type, classes):
+    def __init__(self, model, attack_type, classes, init="zero", decay=0.99):
         self.classes = len(classes)
         self.epsilon = 1
         self.graph = tf.compat.v1.get_default_graph()
         self.use_filter = False
 
-        self.noise = np.zeros((416, 416, 3))
-        # self.noise = np.random.uniform( -2 / 255.0, 2 / 255.0, size=(416, 416, 3))
+        if init == "uniform":
+            self.noise = np.random.uniform( -2 / 255.0, 2 / 255.0, size=(416, 416, 3))
+        else:
+            self.noise = np.zeros((416, 416, 3))
 
         self.adv_patch_boxes = []
         self.fixed = True
@@ -29,6 +31,8 @@ class TOGAttack:
         self.delta = 0
         loss = 0
         self.lr = 4 / 255.0
+        self.decay = decay
+
         self.c_h = []
         for out in self.model.output:
             c_h_i = tf.compat.v1.placeholder(dtype=tf.float32,
@@ -77,7 +81,7 @@ class TOGAttack:
                                                 })
 
                 self.noise = self.noise - self.lr * grads[0, :, :, :]
-                self.lr = self.lr * 0.98
+                self.lr = self.lr * self.decay
                 self.noise = np.clip(self.noise, -1.0, 1.0)
 
                 self.noise = proj_lp(self.noise, xi=8/255.0, p = np.inf)
