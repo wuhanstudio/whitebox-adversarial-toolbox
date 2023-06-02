@@ -1,6 +1,11 @@
 import click
 
-# Main CLI (bat)
+what_attack_list = [
+    ('TOG', 'Object Detection', 'Adversarial Objectness Gradient Attacks in Real-time Object Detection Systems.'),
+    ('PCB', 'Object Detection', 'A Man-in-the-Middle Hardware Attack against Object Detection.')
+]
+
+# Main CLI (what)
 @click.group()
 def main_cli():
     """The CLI tool for WHite-box Adversarial Toolbox (WHAT)."""
@@ -40,7 +45,9 @@ def attack():
 @attack.command('list')
 def attack_list():
     """List supported Attacks"""
-    pass
+    max_len = max([len(x[0]) for x in what_attack_list])
+    for i, attack in enumerate(what_attack_list, start=1):
+        print('{} : {:<{w}s}\t{}'.format(i, attack[0], attack[1], w=max_len))
 
 # what example
 @click.group()
