@@ -10,3 +10,4 @@ scikit-image
 tensorflow
 matplotlib
 pandas
+progressbar

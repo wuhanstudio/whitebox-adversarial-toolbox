@@ -10,7 +10,8 @@ requires = [
     "scikit-image",
     "tensorflow",
     "matplotlib",
-    "click"
+    "click",
+    "progressbar",
 ]
 build-backend = "setuptools.build_meta"
 

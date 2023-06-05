@@ -32,6 +32,7 @@ install_requires = [
     "matplotlib",
     "pandas",
     "click",
+    "progressbar",
 ]
 
 setuptools.setup(
@@ -46,10 +47,8 @@ setuptools.setup(
     license="MIT",
     install_requires=install_requires,
     extra_require = {
-        "dev": [
-            "pytest>=3.6",
-            "pdoc"
-        ]
+        "dev": [    "progressbar",
+
     },
     entry_points={
         'console_scripts': [
