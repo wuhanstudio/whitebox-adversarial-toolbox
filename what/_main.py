@@ -1,28 +1,12 @@
 import click
 
 import os.path
-from pathlib import Path
 
 from what.utils.file import get_file
 
-MODEL_PATH =  os.path.join(Path.home(), '.what', 'models')
-
-what_model_list = [
-    ('YOLOv3      (    Darknet    )', 'Object Detection', 'YOLOv3 pretrained on MS COCO dataset.', 'yolov3.h5', 'https://wuhanstudio.nyc3.cdn.digitaloceanspaces.com/what/yolov3.h5', 'e557c671de8c46ff7d83a9a9b9750bcb2958a7275638c931106ada5d6057a26d'),
-    ('YOLOv3      (   Mobilenet   )', 'Object Detection', 'YOLOv3 pretrained on MS COCO dataset.', 'yolov3_mobilenet_lite_416_coco.h5', 'https://wuhanstudio.nyc3.cdn.digitaloceanspaces.com/what/yolov3_mobilenet_lite_416_coco.h5', '93eb7be204fca8dd8bafa5146b9795978c9ca6a0ba1d2e2c002f4ed0a1322436'),
-    ('YOLOv3 Tiny (    Darknet    )', 'Object Detection', 'YOLOv3 Tiny pretrained on MS COCO dataset.', 'yolov3-tiny.h5', 'https://wuhanstudio.nyc3.cdn.digitaloceanspaces.com/what/yolov3-tiny.h5', '344387880e8ff5e45a313c85f2eeeb2fa4f6d3511ed1e5611aaed438db1f3876'),
-    ('YOLOv3 Tiny (   MobileNet   )', 'Object Detection', 'YOLOv3 Tiny pretrained on MS COCO dataset.', 'tiny_yolo3_mobilenet_lite_416_coco.h5', 'https://wuhanstudio.nyc3.cdn.digitaloceanspaces.com/what/tiny_yolo3_mobilenet_lite_416_coco.h5', 'e124316a47915936baa39a157aca58cac86813b2c9bf49646e26c24e80252000'),
-    ('YOLOv4      (    Darknet    )', 'Object Detection', 'YOLOv4 pretrained on MS COCO dataset.', 'yolov4.h5', 'https://wuhanstudio.nyc3.cdn.digitaloceanspaces.com/what/yolov4.h5', '54802f99cdbddcb0f31180a55d30be1a80d0b73edaa13e9152829318387512e4'),
-    ('YOLOv4 Tiny (    Darknet    )', 'Object Detection', 'YOLOv4 Tiny pretrained on MS COCO dataset.', 'yolov4-tiny.h5', 'https://wuhanstudio.nyc3.cdn.digitaloceanspaces.com/what/yolov4-tiny.h5', '3d6f1a3d0540dd3d807de79cb0ad3374b5cdf7495abef5f89505f1c0fcbf8911'),
-    ('SSD         ( MobileNet  v1 )', 'Object Detection', 'SSD pretrained on MS COCO dataset.', 'mobilenet-v1-ssd-mp-0_675.pth', 'https://wuhanstudio.nyc3.cdn.digitaloceanspaces.com/what/mobilenet-v1-ssd-mp-0_675.pth', '58694cafa60456eeab4e81ae50ff49a01c46ab387bfea5200f047143ecd973a9'),
-    ('SSD         ( MobileNet  v2 )', 'Object Detection', 'SSD pretrained on MS COCO dataset.', 'mobilenet-v2-ssd-lite-mp-0_686.pth', 'https://wuhanstudio.nyc3.cdn.digitaloceanspaces.com/what/mobilenet-v2-ssd-lite-mp-0_686.pth', 'b0d1ac2cdbf3c241ba837f51eeebc565ea37b95b7258e2604506a2f991e398a4'),
-    ('FasterRCNN  (     VGG16     )', 'Object Detection', 'FasterRCNN pretrained on MS COCO dataset.', 'fasterrcnn_12211511_0.701052458187_torchvision_pretrain.pth', 'https://wuhanstudio.nyc3.cdn.digitaloceanspaces.com/what/fasterrcnn_12211511_0.701052458187_torchvision_pretrain.pth', '3fd279284b536da3eac754404779e32e2e9fdd82d8511bbc7f6c50e14f0c69d2')
-]
-
-what_attack_list = [
-    ('TOG Attack', 'Object Detection', 'Adversarial Objectness Gradient Attacks in Real-time Object Detection Systems.'),
-    ('PCB Attack', 'Object Detection', 'A Man-in-the-Middle Hardware Attack against Object Detection.')
-]
+from what.cli.model import *
+from what.cli.attack import *
+from what.cli.example import *
 
 # Main CLI (what)
 @click.group()
@@ -43,11 +27,11 @@ def model_list():
     """List supported models"""
     max_len = max([len(x[0]) for x in what_model_list])
     for i, model in enumerate(what_model_list, start=1):
-        if os.path.isfile(os.path.join(MODEL_PATH, model[3])):
+        if os.path.isfile(os.path.join(WHAT_MODEL_PATH, model[WHAT_MODEL_FILE_INDEX])):
             downloaded = 'x'
         else:
             downloaded = ' '
-        print('[{}] {} : {:<{w}s}\t{}\t{}'.format(downloaded, i, model[0], model[1], model[2], w=max_len))
+        print('[{}] {} : {:<{w}s}\t{}\t{}'.format(downloaded, i, model[WHAT_MODEL_NAME_INDEX], model[WHAT_MODEL_TYPE_INDEX], model[WHAT_MODEL_DESC_INDEX], w=max_len))
 
 # what model download
 @model.command('download')
@@ -55,18 +39,22 @@ def model_download():
     """Download pre-trained models"""
     max_len = max([len(x[0]) for x in what_model_list])
     for i, model in enumerate(what_model_list, start=1):
-        if os.path.isfile(os.path.join(MODEL_PATH, model[3])):
+        if os.path.isfile(os.path.join(WHAT_MODEL_PATH, model[WHAT_MODEL_FILE_INDEX])):
             downloaded = 'x'
         else:
             downloaded = ' '
-        print('[{}] {} : {:<{w}s}\t{}\t{}'.format(downloaded, i, model[0], model[1], model[2], w=max_len))
+        print('[{}] {} : {:<{w}s}\t{}\t{}'.format(downloaded, i, model[WHAT_MODEL_NAME_INDEX], model[WHAT_MODEL_TYPE_INDEX], model[WHAT_MODEL_DESC_INDEX], w=max_len))
 
     index = input(f"Please input the model index: ")
     while not index.isdigit() or int(index) > len(what_model_list):
         index = input(f"Model [{index}] does not exist. Please try again: ")
     
     index = int(index) - 1
-    get_file(what_model_list[index][3], MODEL_PATH, what_model_list[index][4], what_model_list[index][5])
+    get_file(what_model_list[index][WHAT_MODEL_FILE_INDEX],
+             WHAT_MODEL_PATH,
+             what_model_list[index][WHAT_MODEL_URL_INDEX],
+             what_model_list[index][WHAT_MODEL_HASH_INDEX]
+             )
 
 
 # what attack
@@ -81,7 +69,7 @@ def attack_list():
     """List supported Attacks"""
     max_len = max([len(x[0]) for x in what_attack_list])
     for i, attack in enumerate(what_attack_list, start=1):
-        print('{} : {:<{w}s}\t{}'.format(i, attack[0], attack[1], w=max_len))
+        print('{} : {:<{w}s}\t{}'.format(i, attack[WHAT_ATTACK_NAME_INDEX], attack[WHAT_ATTACK_TARGET_INDEX], w=max_len))
 
 
 # what example
@@ -94,14 +82,23 @@ def example():
 @example.command('list')
 def example_list():
     """List examples"""
-    pass
+    max_len = max([len(x[WHAT_EXAMPLE_NAME_INDEX]) for x in what_example_list])
+    for i, example in enumerate(what_example_list, start=1):
+        print('{} : {:<{w}s}\t{}\t{}'.format(i, example[WHAT_EXAMPLE_NAME_INDEX], example[WHAT_EXAMPLE_TYPE_INDEX], example[WHAT_EXAMPLE_DESC_INDEX], w=max_len))
 
 # what exmaple run
 @example.command('run')
 def example_run():
     """Run examples"""
-    pass
+    max_len = max([len(x[0]) for x in what_example_list])
+    for i, example in enumerate(what_example_list, start=1):
+        print('{} : {:<{w}s}\t{}\t{}'.format(i, example[WHAT_EXAMPLE_NAME_INDEX], example[WHAT_EXAMPLE_TYPE_INDEX], example[WHAT_EXAMPLE_DESC_INDEX], w=max_len))
 
+    index = input(f"Please input the example index: ")
+    while not index.isdigit() or int(index) > len(what_example_list):
+        index = input(f"Example [{index}] does not exist. Please try again: ")
+
+    what_example_list[int(index)-1][WHAT_EXAMPLE_FUNC_INDEX]()
 
 def main():
     main_cli.add_command(model)
