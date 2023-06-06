@@ -3,16 +3,20 @@ import os.path
 
 from what.models.detection.datasets.coco import COCO_CLASS_NAMES
 from what.models.detection.utils.box_utils import draw_bounding_boxes
+
 from what.models.detection.yolo.yolov3 import YOLOV3
+from what.models.detection.yolo.yolov3_tiny import YOLOV3_TINY
 
 from what.cli.model import *
 
 from what.utils.file import get_file
 
+what_yolov3_model_list = what_model_list[0:4]
+
 def yolov3_inference_demo():
 
-    max_len = max([len(x[WHAT_MODEL_NAME_INDEX]) for x in what_model_list])
-    for i, model in enumerate(what_model_list[0:2], start=1):
+    max_len = max([len(x[WHAT_MODEL_NAME_INDEX]) for x in what_yolov3_model_list])
+    for i, model in enumerate(what_yolov3_model_list, start=1):
         if os.path.isfile(os.path.join(WHAT_MODEL_PATH, model[WHAT_MODEL_FILE_INDEX])):
             downloaded = 'x'
         else:
@@ -20,17 +24,23 @@ def yolov3_inference_demo():
         print('[{}] {} : {:<{w}s}\t{}\t{}'.format(downloaded, i, model[0], model[1], model[2], w=max_len))
 
     index = input(f"Please input the model index: ")
-    while not index.isdigit() or int(index) > len(what_model_list):
+    while not index.isdigit() or int(index) > len(what_yolov3_model_list):
         index = input(f"Model [{index}] does not exist. Please try again: ")
 
     index = int(index) - 1
 
     # Download the model first if not exists
-    if not os.path.isfile(os.path.join(WHAT_MODEL_PATH, what_model_list[index][WHAT_MODEL_FILE_INDEX])):
-        get_file(what_model_list[index][WHAT_MODEL_FILE_INDEX],
+    if not os.path.isfile(os.path.join(WHAT_MODEL_PATH, what_yolov3_model_list[index][WHAT_MODEL_FILE_INDEX])):
+        get_file(what_yolov3_model_list[index][WHAT_MODEL_FILE_INDEX],
                  WHAT_MODEL_PATH,
-                 what_model_list[index][WHAT_MODEL_URL_INDEX],
-                 what_model_list[index][WHAT_MODEL_HASH_INDEX])
+                 what_yolov3_model_list[index][WHAT_MODEL_URL_INDEX],
+                 what_yolov3_model_list[index][WHAT_MODEL_HASH_INDEX])
+
+    if index == 0 or index == 1:
+        model = YOLOV3(COCO_CLASS_NAMES, os.path.join(WHAT_MODEL_PATH, what_yolov3_model_list[index][WHAT_MODEL_FILE_INDEX]))
+
+    if index == 2 or index == 3:
+        model = YOLOV3_TINY(COCO_CLASS_NAMES, os.path.join(WHAT_MODEL_PATH, what_yolov3_model_list[index][WHAT_MODEL_FILE_INDEX]))
 
     video = input(f"Please input the OpenCV capture device (e.g. demo.mp4, demo.jpg, 0, 1, 2): ")
 
@@ -43,8 +53,6 @@ def yolov3_inference_demo():
 
         #cap.set(3, 1920)
         #cap.set(4, 1080)
-
-        model = YOLOV3(COCO_CLASS_NAMES, os.path.join(WHAT_MODEL_PATH, what_model_list[index][WHAT_MODEL_FILE_INDEX]))
 
         while True:
             _, orig_image = cap.read()
@@ -61,7 +69,7 @@ def yolov3_inference_demo():
             # Draw bounding boxes onto the image
             output = draw_bounding_boxes(image, boxes, labels, model.class_names, probs);
 
-            cv2.imshow('YOLOv3 MobileNet', image)
+            cv2.imshow('YOLOv3 Demo', image)
 
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
@@ -71,8 +79,6 @@ def yolov3_inference_demo():
 
     elif video.endswith('jpg') or video.endswith('png'):
         orig_image = cv2.imread(video)
-
-        model = YOLOV3(COCO_CLASS_NAMES, os.path.join(WHAT_MODEL_PATH, what_model_list[index][WHAT_MODEL_FILE_INDEX]))
 
         # Image preprocessing
         image = cv2.cvtColor(orig_image, cv2.COLOR_BGR2RGB)
@@ -84,7 +90,7 @@ def yolov3_inference_demo():
         # Draw bounding boxes onto the image
         output = draw_bounding_boxes(image, boxes, labels, model.class_names, probs);
 
-        cv2.imshow('YOLOv3 Darknet', image)
+        cv2.imshow('YOLOv4 Darknet', image)
         cv2.waitKey(0)
 
     else:
