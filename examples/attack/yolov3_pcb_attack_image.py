@@ -16,7 +16,7 @@ logger = log.get_logger(__name__)
 
 if __name__ == '__main__':
     # Read class names
-    with open("models/coco_classes.txt") as f:
+    with open("coco_classes.txt") as f:
         content = f.readlines()
     classes = [x.strip() for x in content] 
 

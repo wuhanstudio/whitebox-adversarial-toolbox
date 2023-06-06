@@ -7,35 +7,35 @@ from what.models.detection.utils.box_utils import draw_bounding_boxes
 from what.models.detection.yolo.yolov3 import YOLOV3
 from what.models.detection.yolo.utils.yolo_utils import yolo_process_output, yolov3_anchors, yolov3_tiny_anchors
 
-from what.attacks.detection.yolo.TOG import TOGAttack
+from what.attacks.detection.yolo.PCB import PCBAttack
 from what.utils.resize import bilinear_resize
 import what.utils.logger as log
 
 from what.utils.logger import TensorBoardLogger
 
-prefix = './examples/'
+n_iteration = 500
+
+prefix = './'
 
 # Logging
 logger = log.get_logger(__name__)
 
 # Tensorboard
-tog_log_dir = prefix + './logs/tog/decay/0.90/' + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
-tb = TensorBoardLogger(tog_log_dir)
-
-n_iteration = 500
+pcb_log_dir = prefix + 'logs/b/decay/0.99/' + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+tb = TensorBoardLogger(pcb_log_dir)
 
 if __name__ == '__main__':
     # Read class names
-    with open(prefix + "models/coco_classes.txt") as f:
+    with open(prefix + "coco_classes.txt") as f:
         content = f.readlines()
-    classes = [x.strip() for x in content]
+    classes = [x.strip() for x in content] 
 
     colors = np.random.uniform(0, 255, size=(len(classes), 3))
 
     origin_cv_image = cv2.imread(prefix + 'demo.jpg')
     origin_cv_image = cv2.cvtColor(origin_cv_image, cv2.COLOR_BGR2RGB)
 
-    attack = TOGAttack(prefix + "models/yolov3-tiny.h5", "multi_untargeted", classes, decay=0.90)
+    attack = PCBAttack(prefix + "models/yolov3-tiny.h5", "multi_untargeted", classes, decay=0.99)
     attack.fixed = False
 
     last_outs = None
@@ -64,7 +64,7 @@ if __name__ == '__main__':
 
             tb.log_scalar('mean confidence increase', np.mean(res_list), n)
         else:
-            tb.log_scalar('mean confidence increase', 1.0, n)
+            tb.log_scalar('mean confidence increase', 0.0, n)
             last_outs = outs
 
         boxes, labels, probs = yolo_process_output(outs, yolov3_tiny_anchors, len(classes))

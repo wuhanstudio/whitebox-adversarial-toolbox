@@ -7,52 +7,42 @@ from what.models.detection.utils.box_utils import draw_bounding_boxes
 from what.models.detection.yolo.yolov3 import YOLOV3
 from what.models.detection.yolo.utils.yolo_utils import yolo_process_output, yolov3_anchors, yolov3_tiny_anchors
 
-from what.attacks.detection.yolo.PCB import PCBAttack
+from what.attacks.detection.yolo.TOG import TOGAttack
 from what.utils.resize import bilinear_resize
 import what.utils.logger as log
 
 from what.utils.logger import TensorBoardLogger
 
-n_iteration = 1
-
-prefix = './examples/'
+prefix = './'
 
 # Logging
 logger = log.get_logger(__name__)
 
 # Tensorboard
-pcb_log_dir = prefix + 'logs/pcb/demo/0.99/' + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
-tb = TensorBoardLogger(pcb_log_dir)
+tog_log_dir = prefix + './logs/tog/decay/0.90/' + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+tb = TensorBoardLogger(tog_log_dir)
+
+n_iteration = 500
 
 if __name__ == '__main__':
     # Read class names
-    with open(prefix + "models/coco_classes.txt") as f:
+    with open(prefix + "coco_classes.txt") as f:
         content = f.readlines()
-    classes = [x.strip() for x in content] 
+    classes = [x.strip() for x in content]
 
     colors = np.random.uniform(0, 255, size=(len(classes), 3))
 
     origin_cv_image = cv2.imread(prefix + 'demo.jpg')
     origin_cv_image = cv2.cvtColor(origin_cv_image, cv2.COLOR_BGR2RGB)
 
-    attack = PCBAttack(prefix + "models/yolov3-tiny.h5", "multi_untargeted", classes, decay=0.99)
+    attack = TOGAttack(prefix + "models/yolov3-tiny.h5", "multi_untargeted", classes, decay=0.90)
     attack.fixed = False
 
     last_outs = None
     last_boxes = None
     last_probs = None
 
-    # Initialize the camera
-    camera = cv2.VideoCapture(0)
-
-    n = 0
-
-    while(True): 
-        # Capture the video frame
-        success, origin_cv_image = camera.read()  # read the camera frame
-        if not success:
-            break
-
+    for n in range(0, n_iteration):
         logger.info(f"Iteration: {n}")
 
         # For YOLO, the input pixel values are normalized to [0, 1]
@@ -74,7 +64,7 @@ if __name__ == '__main__':
 
             tb.log_scalar('mean confidence increase', np.mean(res_list), n)
         else:
-            tb.log_scalar('mean confidence increase', 0.0, n)
+            tb.log_scalar('mean confidence increase', 1.0, n)
             last_outs = outs
 
         boxes, labels, probs = yolo_process_output(outs, yolov3_tiny_anchors, len(classes))
@@ -103,13 +93,12 @@ if __name__ == '__main__':
         out_img = out_img.astype(np.float32) / 255.0
         height, width, _ = out_img.shape
         noise = attack.noise
+        noise_r = bilinear_resize(noise[:, :, 0], height, width)
+        noise_g = bilinear_resize(noise[:, :, 1], height, width)
+        noise_b = bilinear_resize(noise[:, :, 2], height, width)
+        noise = np.dstack((noise_r, noise_g, noise_b))
 
-        # noise_r = bilinear_resize(noise[:, :, 0], height, width)
-        # noise_g = bilinear_resize(noise[:, :, 1], height, width)
-        # noise_b = bilinear_resize(noise[:, :, 2], height, width)
-        # noise = np.dstack((noise_r, noise_g, noise_b))
-
-        # out_img = out_img + noise
+        out_img = out_img + noise
         out_img = np.clip(out_img, 0, 1)
 
         out_img = (out_img * 255.0).astype(np.uint8)
@@ -124,8 +113,6 @@ if __name__ == '__main__':
 
         if (cv2.waitKey(1) & 0xFF == ord('q')):
             break
-        
-        n = n + 1
 
     logger.info("Perturbation saved to noise.npy")
     np.save(prefix + 'noise/noise.npy', attack.noise)

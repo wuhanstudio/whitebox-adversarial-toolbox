@@ -38,7 +38,7 @@ if __name__ == '__main__':
     img_paths = train_dataset.values("filepath")
 
     # Read class names
-    with open(prefix + "models/coco_classes.txt") as f:
+    with open(prefix + "coco_classes.txt") as f:
         content = f.readlines()
     classes = [x.strip() for x in content] 
 

@@ -25,7 +25,7 @@ parser.add_argument('--base_net', help='Pretrained base net')
 parser.add_argument('--pretrained_ssd', help='Pretrained base model')
 parser.add_argument('--resume', default=None, type=str, help='Checkpoint state_dict file to resume training from')
 
-parser.add_argument('--checkpoint_folder', default='models/', help='Directory for saving checkpoint models')
+parser.add_argument('--checkpoint_folder', default='checkpoint/', help='Directory for saving checkpoint models')
 
 args = parser.parse_args()
 

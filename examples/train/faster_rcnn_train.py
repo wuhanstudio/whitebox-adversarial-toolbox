@@ -44,7 +44,7 @@ if __name__ == '__main__':
                                             target_transform=target_transform)
 
     # Load Training Dataset from Local Disk
-    # train_dataset = VOCDataset("examples/VOC2012", transform=train_transform,
+    # train_dataset = VOCDataset("VOC2012/", transform=train_transform,
     #                              target_transform=target_transform)
 
     train_loader  = DataLoader(train_dataset, batch_size,
