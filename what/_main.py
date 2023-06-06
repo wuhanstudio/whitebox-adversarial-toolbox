@@ -30,6 +30,7 @@ def main_cli():
     """The CLI tool for WHite-box Adversarial Toolbox (WHAT)."""
     pass
 
+
 # what model
 @click.group()
 def model():
@@ -67,11 +68,6 @@ def model_download():
     index = int(index) - 1
     get_file(what_model_list[index][3], MODEL_PATH, what_model_list[index][4], what_model_list[index][5])
 
-# what model run
-@model.command('run')
-def model_run():
-    """Run supported models"""
-    pass
 
 # what attack
 @click.group()
@@ -86,6 +82,7 @@ def attack_list():
     max_len = max([len(x[0]) for x in what_attack_list])
     for i, attack in enumerate(what_attack_list, start=1):
         print('{} : {:<{w}s}\t{}'.format(i, attack[0], attack[1], w=max_len))
+
 
 # what example
 @click.group()
@@ -105,6 +102,7 @@ def example_run():
     """Run examples"""
     pass
 
+
 def main():
     main_cli.add_command(model)
     main_cli.add_command(attack)
@@ -112,7 +110,6 @@ def main():
 
     model.add_command(model_list)
     model.add_command(model_download)
-    model.add_command(model_run)
 
     attack.add_command(attack_list)
 
