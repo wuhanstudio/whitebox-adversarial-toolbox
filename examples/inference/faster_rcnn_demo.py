@@ -6,9 +6,19 @@ from what.models.detection.frcnn.faster_rcnn import FasterRCNN
 # from what.models.detection.frcnn.datasets.util import read_image
 
 from what.cli.model import *
+from what.utils.file import get_file
 
 from what.models.detection.utils.box_utils import draw_bounding_boxes
 from what.models.detection.datasets.voc import VOC_CLASS_NAMES
+
+# Download the model first if not exists
+# Check what_model_list for all available models
+index = 8
+if not os.path.isfile(os.path.join(WHAT_MODEL_PATH, what_model_list[index][WHAT_MODEL_FILE_INDEX])):
+    get_file(what_model_list[index][WHAT_MODEL_FILE_INDEX],
+                WHAT_MODEL_PATH,
+                what_model_list[index][WHAT_MODEL_URL_INDEX],
+                what_model_list[index][WHAT_MODEL_HASH_INDEX])
 
 # Capture from camera
 cap = cv2.VideoCapture(0)

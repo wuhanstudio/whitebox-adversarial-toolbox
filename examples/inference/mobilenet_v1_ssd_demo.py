@@ -2,6 +2,7 @@ import cv2
 import torch
 
 from what.cli.model import *
+from what.utils.file import get_file
 
 from what.models.detection.ssd.mobilenet_v1_ssd import MobileNetV1SSD
 from what.models.detection.utils.box_utils import draw_bounding_boxes
@@ -12,6 +13,15 @@ device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 cap = cv2.VideoCapture(0)
 #cap.set(3, 1920)
 #cap.set(4, 1080)
+
+# Download the model first if not exists
+# Check what_model_list for all available models
+index = 6
+if not os.path.isfile(os.path.join(WHAT_MODEL_PATH, what_model_list[index][WHAT_MODEL_FILE_INDEX])):
+    get_file(what_model_list[index][WHAT_MODEL_FILE_INDEX],
+                WHAT_MODEL_PATH,
+                what_model_list[index][WHAT_MODEL_URL_INDEX],
+                what_model_list[index][WHAT_MODEL_HASH_INDEX])
 
 # Initialize the model
 model = MobileNetV1SSD(os.path.join(WHAT_MODEL_PATH, model_path=what_model_list[6][WHAT_MODEL_FILE_INDEX]),
