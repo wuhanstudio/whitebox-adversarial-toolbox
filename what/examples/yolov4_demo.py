@@ -21,7 +21,7 @@ def yolov4_inference_demo():
             downloaded = 'x'
         else:
             downloaded = ' '
-        print('[{}] {} : {:<{w}s}\t{}\t{}'.format(downloaded, i, model[0], model[1], model[2], w=max_len))
+        print('[{}] {} : {:<{w}s}\t{}\t{}'.format(downloaded, i, model[WHAT_MODEL_NAME_INDEX], model[WHAT_MODEL_TYPE_INDEX], model[WHAT_MODEL_DESC_INDEX], w=max_len))
 
     index = input(f"Please input the model index: ")
     while not index.isdigit() or int(index) > len(what_yolov4_model_list):
