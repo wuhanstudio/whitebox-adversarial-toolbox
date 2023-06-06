@@ -4,16 +4,32 @@ from what.models.detection.datasets.coco import COCO_CLASS_NAMES
 from what.models.detection.utils.box_utils import draw_bounding_boxes
 from what.models.detection.yolo.yolov3 import YOLOV3
 
+from what.cli.model import *
+from what.utils.file import get_file
+
+what_yolov3_model_list = what_model_list[0:4]
+
 # Capture from camera
 cap = cv2.VideoCapture(0)
 #cap.set(3, 1920)
 #cap.set(4, 1080)
 
-# MobileNet
-# model = YOLOV3(COCO_CLASS_NAMES, "models/yolov3_mobilenet_lite_416_coco.h5")
+# Check what_model_list for all supported models
+index = 1
 
-# Darknet
-model = YOLOV3(COCO_CLASS_NAMES, "models/yolov3.h5")
+# Download the model first if not exists
+if not os.path.isfile(os.path.join(WHAT_MODEL_PATH, what_yolov3_model_list[index][WHAT_MODEL_FILE_INDEX])):
+    get_file(what_yolov3_model_list[index][WHAT_MODEL_FILE_INDEX],
+                WHAT_MODEL_PATH,
+                what_yolov3_model_list[index][WHAT_MODEL_URL_INDEX],
+                what_yolov3_model_list[index][WHAT_MODEL_HASH_INDEX])
+
+# MobileNet
+model = YOLOV3(COCO_CLASS_NAMES, os.path.join(WHAT_MODEL_PATH, what_yolov3_model_list[index][WHAT_MODEL_FILE_INDEX]))
+
+# You can also use your own model
+# model = YOLOV3(COCO_CLASS_NAMES, "models/yolov3.h5")
+# model = YOLOV3(COCO_CLASS_NAMES, "models/yolov3_mobilenet_lite_416_coco.h5")
 
 while True:
     _, orig_image = cap.read()
