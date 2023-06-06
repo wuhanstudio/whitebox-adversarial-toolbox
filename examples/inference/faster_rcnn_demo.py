@@ -5,6 +5,8 @@ import numpy as np
 from what.models.detection.frcnn.faster_rcnn import FasterRCNN
 # from what.models.detection.frcnn.datasets.util import read_image
 
+from what.cli.model import *
+
 from what.models.detection.utils.box_utils import draw_bounding_boxes
 from what.models.detection.datasets.voc import VOC_CLASS_NAMES
 
@@ -34,7 +36,7 @@ while True:
     # img = img.transpose((1, 2, 0)).astype(np.uint8)
 
     model = FasterRCNN(device=device)
-    model.load('models/fasterrcnn_12211511_0.701052458187_torchvision_pretrain.pth', map_location=device)
+    model.load(os.path.join(WHAT_MODEL_PATH, what_model_list[8][WHAT_MODEL_FILE_INDEX]), map_location=device)
 
     inputs, boxes, labels, scores = model.predict(input)
 

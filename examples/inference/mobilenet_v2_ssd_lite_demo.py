@@ -1,6 +1,8 @@
 import cv2
-import sys
 import torch
+
+from what.cli.model import *
+
 from what.models.detection.ssd.mobilenet_v2_ssd_lite import MobileNetV2SSDLite
 from what.models.detection.utils.box_utils import draw_bounding_boxes
 
@@ -12,10 +14,9 @@ cap = cv2.VideoCapture(0)
 #cap.set(4, 1080)
 
 # Initialize the model
-if len(sys.argv) == 2:
-    model = MobileNetV2SSDLite(model_path=sys.argv[1], is_test=True, device=device)
-else:
-    model = MobileNetV2SSDLite(pretrained=True, is_test=True, device=device)
+model = MobileNetV2SSDLite(os.path.join(WHAT_MODEL_PATH, model_path=what_model_list[7][WHAT_MODEL_FILE_INDEX]),
+                           is_test=True,
+                           device=device)
 
 while True:
     _, orig_image = cap.read()
