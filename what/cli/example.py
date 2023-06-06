@@ -8,5 +8,5 @@ WHAT_EXAMPLE_FUNC_INDEX = 3
 
 what_example_list = [
     ('Yolov3 Demo', ' Model Inference ', 'Yolov3 Object Detection.', yolov3_inference_demo),
-    ('Yolov4 Demo', ' Model Inference ', 'Yolov4 Object Detection.', yolov3_inference_demo),
+    ('Yolov4 Demo', ' Model Inference ', 'Yolov4 Object Detection.', yolov4_inference_demo),
 ]
