@@ -24,7 +24,7 @@ if not os.path.isfile(os.path.join(WHAT_MODEL_PATH, what_model_list[index][WHAT_
                 what_model_list[index][WHAT_MODEL_HASH_INDEX])
 
 # Initialize the model
-model = MobileNetV2SSDLite(os.path.join(WHAT_MODEL_PATH, model_path=what_model_list[7][WHAT_MODEL_FILE_INDEX]),
+model = MobileNetV2SSDLite(os.path.join(WHAT_MODEL_PATH, what_model_list[index][WHAT_MODEL_FILE_INDEX]),
                            is_test=True,
                            device=device)
 
