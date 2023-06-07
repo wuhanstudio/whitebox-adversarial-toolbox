@@ -59,4 +59,22 @@ Available models:
 [x] 9 : FasterRCNN  (     VGG16     )   Object Detection        Faster-RCNN pretrained on VOC-2012 dataset.
 ```
 
+## A Man-in-the-Middle Hardware Attack
+
+<!-- > This project uses a Raspberry Pi 4 to fool the object detection system in real-time. -->
+
+The perturbation can be deployed using a Man-in-the-Middle Hardware Attack.
+
+[[ Talk ]](https://minm.wuhanstudio.uk) [[ Video ]](https://youtu.be/OvIpe-R3ZS8) [[ Paper ]](https://arxiv.org/abs/2208.07174) [[ Code ]](https://github.com/wuhanstudio/adversarial-camera)
+
+![](https://github.com/wuhanstudio/adversarial-camera/raw/master/doc/demo.png)
+
+![](https://github.com/wuhanstudio/adversarial-camera/raw/master/doc/demo.jpg)
+
+The Man-in-the-Middle Attack consists of two steps:
+
+- Step 1: [Generating the perturbation](detection/README.md).
+- Step 2: [Deploying the perturbation](hardware/README.md).
+
+
 <h3> <a href="https://what.wuhanstudio.uk/"> Documentation </a>
