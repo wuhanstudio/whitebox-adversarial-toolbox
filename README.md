@@ -7,6 +7,7 @@
 [![PyPI version](https://badge.fury.io/py/whitebox-adversarial-toolbox.svg)](https://badge.fury.io/py/whitebox-adversarial-toolbox)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/whitebox-adversarial-toolbox)](https://pypi.org/project/whitebox-adversarial-toolbox/)
+[![](https://img.shields.io/badge/Documentation-infromational)](https://what.wuhanstudio.uk/)
 
 A Python Library for Deep Learning Security that focuses on Real-time White-box Attacks.
 
@@ -73,6 +74,3 @@ The Man-in-the-Middle Attack consists of two steps:
 
 - Step 1: [Generating the perturbation](detection/README.md).
 - Step 2: [Deploying the perturbation](hardware/README.md).
-
-
-<h3> <a href="https://what.wuhanstudio.uk/"> Documentation </a>
