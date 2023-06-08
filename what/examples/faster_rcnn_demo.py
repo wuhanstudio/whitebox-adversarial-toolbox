@@ -34,6 +34,10 @@ def frcnn_inference_demo():
 
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
+    model = FasterRCNN(device=device)
+
+    model.load(os.path.join(WHAT_MODEL_PATH, what_model_list[index][WHAT_MODEL_FILE_INDEX]), map_location=device)
+
     while True:
         _, orig_image = cap.read()
         if orig_image is None:
@@ -51,9 +55,6 @@ def frcnn_inference_demo():
         # input_img = torch.from_numpy(img)[None]
         # RGB --> BGR
         # img = img.transpose((1, 2, 0)).astype(np.uint8)
-
-        model = FasterRCNN(device=device)
-        model.load(os.path.join(WHAT_MODEL_PATH, what_model_list[8][WHAT_MODEL_FILE_INDEX]), map_location=device)
 
         inputs, boxes, labels, scores = model.predict(input_img)
 
@@ -74,7 +75,7 @@ def frcnn_inference_demo():
                 VOC_CLASS_NAMES[1:],
                 scores[0])
 
-        cv2.imshow('Faster RCNN', output)
+        cv2.imshow('Faster RCNN Demo', output)
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break

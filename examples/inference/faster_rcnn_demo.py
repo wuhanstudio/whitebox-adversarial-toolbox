@@ -20,12 +20,22 @@ if not os.path.isfile(os.path.join(WHAT_MODEL_PATH, what_model_list[index][WHAT_
                 what_model_list[index][WHAT_MODEL_URL_INDEX],
                 what_model_list[index][WHAT_MODEL_HASH_INDEX])
 
+what_yolov4_model_list = what_model_list[4:6]
+
+video = input(f"Please input the OpenCV capture device (e.g. 0, 1, 2): ")
+
+while not video.isdigit():
+    video = input(f"Please input the OpenCV capture device (e.g. 0, 1, 2): ")
+
 # Capture from camera
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(int(video))
 #cap.set(3, 1920)
 #cap.set(4, 1080)
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+
+model = FasterRCNN(device=device)
+model.load(os.path.join(WHAT_MODEL_PATH, what_model_list[8][WHAT_MODEL_FILE_INDEX]), map_location=device)
 
 while True:
     _, orig_image = cap.read()
@@ -44,9 +54,6 @@ while True:
     # input = torch.from_numpy(img)[None]
     # RGB --> BGR
     # img = img.transpose((1, 2, 0)).astype(np.uint8)
-
-    model = FasterRCNN(device=device)
-    model.load(os.path.join(WHAT_MODEL_PATH, what_model_list[8][WHAT_MODEL_FILE_INDEX]), map_location=device)
 
     inputs, boxes, labels, scores = model.predict(input)
 
