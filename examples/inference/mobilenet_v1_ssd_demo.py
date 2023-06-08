@@ -9,8 +9,13 @@ from what.models.detection.utils.box_utils import draw_bounding_boxes
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
+video = input(f"Please input the OpenCV capture device (e.g. 0, 1, 2): ")
+
+while not video.isdigit():
+    video = input(f"Please input the OpenCV capture device (e.g. 0, 1, 2): ")
+
 # Capture from camera
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(int(video))
 #cap.set(3, 1920)
 #cap.set(4, 1080)
 

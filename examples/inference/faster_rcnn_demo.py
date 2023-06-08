@@ -20,8 +20,6 @@ if not os.path.isfile(os.path.join(WHAT_MODEL_PATH, what_model_list[index][WHAT_
                 what_model_list[index][WHAT_MODEL_URL_INDEX],
                 what_model_list[index][WHAT_MODEL_HASH_INDEX])
 
-what_yolov4_model_list = what_model_list[4:6]
-
 video = input(f"Please input the OpenCV capture device (e.g. 0, 1, 2): ")
 
 while not video.isdigit():

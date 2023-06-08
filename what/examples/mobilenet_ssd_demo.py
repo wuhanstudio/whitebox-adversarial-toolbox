@@ -29,11 +29,6 @@ def mobilenet_ssd_inference_demo():
 
     index = int(index) - 1
 
-    # Capture from camera
-    cap = cv2.VideoCapture(0)
-    #cap.set(3, 1920)
-    #cap.set(4, 1080)
-
     # Download the model first if not exists
     # Check what_model_list for all available models
     if not os.path.isfile(os.path.join(WHAT_MODEL_PATH, what_ssd_model_list[index][WHAT_MODEL_FILE_INDEX])):
@@ -54,27 +49,41 @@ def mobilenet_ssd_inference_demo():
                                 is_test=True,
                                 device=device)
 
-    while True:
-        _, orig_image = cap.read()
-        if orig_image is None:
-            continue
+    video = input(f"Please input the OpenCV capture device (e.g. 0, 1, 2): ")
 
-        # Image preprocessing
-        image = cv2.cvtColor(orig_image, cv2.COLOR_BGR2RGB)
+    while not video.isdigit():
+        video = input(f"Please input the OpenCV capture device (e.g. 0, 1, 2): ")
 
-        # Run inference
-        images, boxes, labels, probs = model.predict(image, 10, 0.4)
-        image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+    # Capture from camera
+    cap = cv2.VideoCapture(int(video))
+    #cap.set(3, 1920)
+    #cap.set(4, 1080)
 
-        # Draw bounding boxes onto the image
-        height, width, _ = image.shape
+    try:
+        while True:
+            _, orig_image = cap.read()
+            if orig_image is None:
+                continue
 
-        output = draw_bounding_boxes(image, boxes, labels, model.class_names, probs);
+            # Image preprocessing
+            image = cv2.cvtColor(orig_image, cv2.COLOR_BGR2RGB)
 
-        cv2.imshow('MobileNetv1 SSD', output)
+            # Run inference
+            images, boxes, labels, probs = model.predict(image, 10, 0.4)
+            image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
 
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
+            # Draw bounding boxes onto the image
+            height, width, _ = image.shape
 
-    cap.release()
-    cv2.destroyAllWindows()
+            output = draw_bounding_boxes(image, boxes, labels, model.class_names, probs);
+
+            cv2.imshow('MobileNet SSD Demo', output)
+
+            if cv2.waitKey(1) & 0xFF == ord('q'):
+                break
+
+        cap.release()
+        cv2.destroyAllWindows()
+
+    except Exception as e:
+        print(enumerate)
