@@ -42,7 +42,7 @@ def yolov4_inference_demo():
     if index == 1:
         model = YOLOV4_TINY(COCO_CLASS_NAMES, os.path.join(WHAT_MODEL_PATH, what_yolov4_model_list[index][WHAT_MODEL_FILE_INDEX]))
 
-    video = input(f"Please input the OpenCV capture device (e.g. demo.mp4, demo.jpg, 0, 1, 2): ")
+    video = input(f"Please input the OpenCV capture device (e.g. 0, 1, 2): ")
 
     while not video.isdigit():
         video = input(f"Please input the OpenCV capture device (e.g. 0, 1, 2): ")
