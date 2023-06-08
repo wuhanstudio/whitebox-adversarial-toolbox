@@ -42,9 +42,12 @@ def yolov3_inference_demo():
     if index == 2 or index == 3:
         model = YOLOV3_TINY(COCO_CLASS_NAMES, os.path.join(WHAT_MODEL_PATH, what_yolov3_model_list[index][WHAT_MODEL_FILE_INDEX]))
 
-    video = input(f"Please input the OpenCV capture device (e.g. demo.mp4, demo.jpg, 0, 1, 2): ")
+    video = input(f"Please input the OpenCV capture device (e.g. 0, 1, 2): ")
 
-    if video.endswith('mp4') or video.isdigit():
+    while not video.isdigit():
+        video = input(f"Please input the OpenCV capture device (e.g. 0, 1, 2): ")
+
+    try:
         # Capture from camera or video
         if video.isdigit():
             cap = cv2.VideoCapture(int(video))
@@ -77,21 +80,5 @@ def yolov3_inference_demo():
         cap.release()
         cv2.destroyAllWindows()
 
-    elif video.endswith('jpg') or video.endswith('png'):
-        orig_image = cv2.imread(video)
-
-        # Image preprocessing
-        image = cv2.cvtColor(orig_image, cv2.COLOR_BGR2RGB)
-
-        # Run inference
-        images, boxes, labels, probs = model.predict(image, 10, 0.4)
-        image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
-
-        # Draw bounding boxes onto the image
-        output = draw_bounding_boxes(image, boxes, labels, model.class_names, probs);
-
-        cv2.imshow('YOLOv4 Darknet', image)
-        cv2.waitKey(0)
-
-    else:
-        print('Unsupported Capture Device "{}"'.format(video))
+    except Exception as e:
+        print(e)
