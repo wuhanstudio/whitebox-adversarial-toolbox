@@ -9,8 +9,13 @@ from what.utils.file import get_file
 
 what_yolov3_model_list = what_model_list[0:4]
 
+video = input(f"Please input the OpenCV capture device (e.g. 0, 1, 2): ")
+
+while not video.isdigit():
+    video = input(f"Please input the OpenCV capture device (e.g. 0, 1, 2): ")
+
 # Capture from camera
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(int(video))
 #cap.set(3, 1920)
 #cap.set(4, 1080)
 
