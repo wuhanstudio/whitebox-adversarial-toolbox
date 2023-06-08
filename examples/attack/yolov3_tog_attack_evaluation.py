@@ -13,6 +13,9 @@ import what.utils.logger as log
 
 from what.utils.logger import TensorBoardLogger
 
+from what.cli.model import *
+from what.utils.file import get_file
+
 prefix = './'
 
 # Logging
@@ -24,18 +27,31 @@ tb = TensorBoardLogger(tog_log_dir)
 
 n_iteration = 500
 
+# Target Model
+what_yolov3_model_list = what_model_list[0:4]
+
 if __name__ == '__main__':
-    # Read class names
-    with open(prefix + "coco_classes.txt") as f:
-        content = f.readlines()
-    classes = [x.strip() for x in content]
+
+    classes = COCO_CLASS_NAMES
 
     colors = np.random.uniform(0, 255, size=(len(classes), 3))
 
     origin_cv_image = cv2.imread(prefix + 'demo.jpg')
     origin_cv_image = cv2.cvtColor(origin_cv_image, cv2.COLOR_BGR2RGB)
 
-    attack = TOGAttack(prefix + "models/yolov3-tiny.h5", "multi_untargeted", classes, decay=0.90)
+    # Check what_model_list for all supported models
+    index = 3
+
+    # Download the model first if not exists
+    if not os.path.isfile(os.path.join(WHAT_MODEL_PATH, what_yolov3_model_list[index][WHAT_MODEL_FILE_INDEX])):
+        get_file(what_yolov3_model_list[index][WHAT_MODEL_FILE_INDEX],
+                    WHAT_MODEL_PATH,
+                    what_yolov3_model_list[index][WHAT_MODEL_URL_INDEX],
+                    what_yolov3_model_list[index][WHAT_MODEL_HASH_INDEX])
+
+    # Adversarial Attack
+    model_path = os.path.join(WHAT_MODEL_PATH, what_yolov3_model_list[index][WHAT_MODEL_FILE_INDEX])
+    attack = TOGAttack(model_path, "multi_untargeted", classes, decay=0.90)
     attack.fixed = False
 
     last_outs = None

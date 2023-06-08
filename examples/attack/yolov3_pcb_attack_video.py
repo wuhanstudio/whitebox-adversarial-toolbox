@@ -4,14 +4,16 @@ import numpy as np
 
 from what.models.detection.datasets.coco import COCO_CLASS_NAMES
 from what.models.detection.utils.box_utils import draw_bounding_boxes
-from what.models.detection.yolo.yolov3 import YOLOV3
 from what.models.detection.yolo.utils.yolo_utils import yolo_process_output, yolov3_anchors, yolov3_tiny_anchors
 
 from what.attacks.detection.yolo.PCB import PCBAttack
 from what.utils.resize import bilinear_resize
-import what.utils.logger as log
 
+import what.utils.logger as log
 from what.utils.logger import TensorBoardLogger
+
+from what.cli.model import *
+from what.utils.file import get_file
 
 n_iteration = 1
 
@@ -24,15 +26,28 @@ logger = log.get_logger(__name__)
 pcb_log_dir = prefix + 'logs/pcb/demo/0.99/' + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
 tb = TensorBoardLogger(pcb_log_dir)
 
+# Target Model
+what_yolov3_model_list = what_model_list[0:4]
+
 if __name__ == '__main__':
-    # Read class names
-    with open(prefix + "coco_classes.txt") as f:
-        content = f.readlines()
-    classes = [x.strip() for x in content] 
+
+    classes = COCO_CLASS_NAMES
 
     colors = np.random.uniform(0, 255, size=(len(classes), 3))
 
-    attack = PCBAttack(prefix + "models/yolov3-tiny.h5", "multi_untargeted", classes, decay=0.99)
+    # Check what_model_list for all supported models
+    index = 3
+
+    # Download the model first if not exists
+    if not os.path.isfile(os.path.join(WHAT_MODEL_PATH, what_yolov3_model_list[index][WHAT_MODEL_FILE_INDEX])):
+        get_file(what_yolov3_model_list[index][WHAT_MODEL_FILE_INDEX],
+                    WHAT_MODEL_PATH,
+                    what_yolov3_model_list[index][WHAT_MODEL_URL_INDEX],
+                    what_yolov3_model_list[index][WHAT_MODEL_HASH_INDEX])
+
+    # Adversarial Attack
+    model_path = os.path.join(WHAT_MODEL_PATH, what_yolov3_model_list[index][WHAT_MODEL_FILE_INDEX])
+    attack = PCBAttack(model_path, "multi_untargeted", classes, decay=0.99)
     attack.fixed = False
 
     last_outs = None
@@ -40,13 +55,21 @@ if __name__ == '__main__':
     last_probs = None
 
     # Initialize the camera
-    camera = cv2.VideoCapture(0)
+    video = input(f"Please input the OpenCV capture device (e.g. 0, 1, 2): ")
+
+    while not video.isdigit():
+        video = input(f"Please input the OpenCV capture device (e.g. 0, 1, 2): ")
+
+    # Capture from camera
+    cap = cv2.VideoCapture(int(video))
+    #cap.set(3, 1920)
+    #cap.set(4, 1080)
 
     n = 0
 
     while(True): 
         # Capture the video frame
-        success, origin_cv_image = camera.read()  # read the camera frame
+        success, origin_cv_image = cap.read()  # read the camera frame
         if not success:
             break
 
@@ -101,6 +124,7 @@ if __name__ == '__main__':
         height, width, _ = out_img.shape
         noise = attack.noise
 
+        # Resize the noise to the same shape as the input image
         # noise_r = bilinear_resize(noise[:, :, 0], height, width)
         # noise_g = bilinear_resize(noise[:, :, 1], height, width)
         # noise_b = bilinear_resize(noise[:, :, 2], height, width)
