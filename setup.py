@@ -48,7 +48,7 @@ setuptools.setup(
     install_requires=install_requires,
     extra_require = {
         "dev": [    "progressbar",
-
+        ]
     },
     entry_points={
         'console_scripts': [
