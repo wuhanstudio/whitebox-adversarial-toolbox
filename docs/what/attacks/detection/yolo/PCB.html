@@ -46,7 +46,7 @@
     </ul>
 
 
-            <footer>White-box Adversarial Toolbox v0.1.0</footer>
+            <footer>White-box Adversarial Toolbox v0.1.2</footer>
 
         <a class="attribution" title="pdoc: Python API documentation generator" href="https://pdoc.dev" target="_blank">
             built with <span class="visually-hidden">pdoc</span><img
@@ -74,7 +74,7 @@
 </span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a><span class="n">tf</span><span class="o">.</span><span class="n">compat</span><span class="o">.</span><span class="n">v1</span><span class="o">.</span><span class="n">disable_eager_execution</span><span class="p">()</span>
 </span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="kn">import</span> <span class="nn">keras.backend</span> <span class="k">as</span> <span class="nn">K</span>
 </span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a>
-</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a><span class="kn">from</span> <span class="nn">what.utils.proj_lp</span> <span class="kn">import</span> <span class="n">proj_lp</span>
+</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a><span class="kn">from</span> <span class="nn">what.utils.proj</span> <span class="kn">import</span> <span class="n">proj_lp</span>
 </span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a>
 </span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a><span class="k">class</span> <span class="nc">PCBAttack</span><span class="p">:</span>
 </span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">attack_type</span><span class="p">,</span> <span class="n">classes</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="s2">&quot;zero&quot;</span><span class="p">,</span> <span class="n">learning_rate</span> <span class="o">=</span> <span class="mi">4</span> <span class="o">/</span> <span class="mf">255.0</span><span class="p">,</span> <span class="n">batch</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">decay</span> <span class="o">=</span> <span class="mf">0.98</span><span class="p">):</span>
