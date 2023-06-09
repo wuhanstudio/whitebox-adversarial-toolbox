@@ -37,7 +37,7 @@
     </ul>
 
 
-            <footer>White-box Adversarial Toolbox v0.0.1</footer>
+            <footer>White-box Adversarial Toolbox v0.1.0</footer>
 
         <a class="attribution" title="pdoc: Python API documentation generator" href="https://pdoc.dev" target="_blank">
             built with <span class="visually-hidden">pdoc</span><img
@@ -100,7 +100,7 @@
 </span><span id="L-42"><a href="#L-42"><span class="linenos">42</span></a>    <span class="k">if</span> <span class="n">index</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
 </span><span id="L-43"><a href="#L-43"><span class="linenos">43</span></a>        <span class="n">model</span> <span class="o">=</span> <span class="n">YOLOV4_TINY</span><span class="p">(</span><span class="n">COCO_CLASS_NAMES</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">WHAT_MODEL_PATH</span><span class="p">,</span> <span class="n">what_yolov4_model_list</span><span class="p">[</span><span class="n">index</span><span class="p">][</span><span class="n">WHAT_MODEL_FILE_INDEX</span><span class="p">]))</span>
 </span><span id="L-44"><a href="#L-44"><span class="linenos">44</span></a>
-</span><span id="L-45"><a href="#L-45"><span class="linenos">45</span></a>    <span class="n">video</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Please input the OpenCV capture device (e.g. demo.mp4, demo.jpg, 0, 1, 2): &quot;</span><span class="p">)</span>
+</span><span id="L-45"><a href="#L-45"><span class="linenos">45</span></a>    <span class="n">video</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Please input the OpenCV capture device (e.g. 0, 1, 2): &quot;</span><span class="p">)</span>
 </span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a>
 </span><span id="L-47"><a href="#L-47"><span class="linenos">47</span></a>    <span class="k">while</span> <span class="ow">not</span> <span class="n">video</span><span class="o">.</span><span class="n">isdigit</span><span class="p">():</span>
 </span><span id="L-48"><a href="#L-48"><span class="linenos">48</span></a>        <span class="n">video</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Please input the OpenCV capture device (e.g. 0, 1, 2): &quot;</span><span class="p">)</span>
@@ -184,7 +184,7 @@
 </span><span id="yolov4_inference_demo-43"><a href="#yolov4_inference_demo-43"><span class="linenos">43</span></a>    <span class="k">if</span> <span class="n">index</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
 </span><span id="yolov4_inference_demo-44"><a href="#yolov4_inference_demo-44"><span class="linenos">44</span></a>        <span class="n">model</span> <span class="o">=</span> <span class="n">YOLOV4_TINY</span><span class="p">(</span><span class="n">COCO_CLASS_NAMES</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">WHAT_MODEL_PATH</span><span class="p">,</span> <span class="n">what_yolov4_model_list</span><span class="p">[</span><span class="n">index</span><span class="p">][</span><span class="n">WHAT_MODEL_FILE_INDEX</span><span class="p">]))</span>
 </span><span id="yolov4_inference_demo-45"><a href="#yolov4_inference_demo-45"><span class="linenos">45</span></a>
-</span><span id="yolov4_inference_demo-46"><a href="#yolov4_inference_demo-46"><span class="linenos">46</span></a>    <span class="n">video</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Please input the OpenCV capture device (e.g. demo.mp4, demo.jpg, 0, 1, 2): &quot;</span><span class="p">)</span>
+</span><span id="yolov4_inference_demo-46"><a href="#yolov4_inference_demo-46"><span class="linenos">46</span></a>    <span class="n">video</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Please input the OpenCV capture device (e.g. 0, 1, 2): &quot;</span><span class="p">)</span>
 </span><span id="yolov4_inference_demo-47"><a href="#yolov4_inference_demo-47"><span class="linenos">47</span></a>
 </span><span id="yolov4_inference_demo-48"><a href="#yolov4_inference_demo-48"><span class="linenos">48</span></a>    <span class="k">while</span> <span class="ow">not</span> <span class="n">video</span><span class="o">.</span><span class="n">isdigit</span><span class="p">():</span>
 </span><span id="yolov4_inference_demo-49"><a href="#yolov4_inference_demo-49"><span class="linenos">49</span></a>        <span class="n">video</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Please input the OpenCV capture device (e.g. 0, 1, 2): &quot;</span><span class="p">)</span>
