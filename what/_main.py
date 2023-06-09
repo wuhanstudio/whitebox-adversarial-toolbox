@@ -26,6 +26,10 @@ def model():
 def model_list():
     """List supported models"""
     max_len = max([len(x[0]) for x in what_model_list])
+
+    print('         {:<{w}s}\t{}\t{}'.format("       Model       ", "   Model Type   ", "Description", w=max_len))
+    print('-' * 100)
+
     for i, model in enumerate(what_model_list, start=1):
         if os.path.isfile(os.path.join(WHAT_MODEL_PATH, model[WHAT_MODEL_FILE_INDEX])):
             downloaded = 'x'
@@ -38,6 +42,10 @@ def model_list():
 def model_download():
     """Download pre-trained models"""
     max_len = max([len(x[0]) for x in what_model_list])
+ 
+    print('         {:<{w}s}\t{}\t{}'.format("       Model       ", "   Model Type   ", "Description", w=max_len))
+    print('-' * 100)
+
     for i, model in enumerate(what_model_list, start=1):
         if os.path.isfile(os.path.join(WHAT_MODEL_PATH, model[WHAT_MODEL_FILE_INDEX])):
             downloaded = 'x'
@@ -45,7 +53,7 @@ def model_download():
             downloaded = ' '
         print('[{}] {} : {:<{w}s}\t{}\t{}'.format(downloaded, i, model[WHAT_MODEL_NAME_INDEX], model[WHAT_MODEL_TYPE_INDEX], model[WHAT_MODEL_DESC_INDEX], w=max_len))
 
-    index = input(f"Please input the model index: ")
+    index = input(f"\nPlease input the model index: ")
     while not index.isdigit() or int(index) > len(what_model_list):
         index = input(f"Model [{index}] does not exist. Please try again: ")
     
@@ -68,6 +76,7 @@ def attack():
 def attack_list():
     """List supported Attacks"""
     max_len = max([len(x[0]) for x in what_attack_list])
+
     for i, attack in enumerate(what_attack_list, start=1):
         print('{} : {:<{w}s}\t{}'.format(i, attack[WHAT_ATTACK_NAME_INDEX], attack[WHAT_ATTACK_TARGET_INDEX], w=max_len))
 
@@ -83,6 +92,10 @@ def example():
 def example_list():
     """List examples"""
     max_len = max([len(x[WHAT_EXAMPLE_NAME_INDEX]) for x in what_example_list])
+
+    print('   {:<{w}s}\t{}\t{}'.format("        Demo        ", "       Type       ", "Description", w=max_len))
+    print('-' * 80)
+
     for i, example in enumerate(what_example_list, start=1):
         print('{} : {:<{w}s}\t{}\t{}'.format(i, example[WHAT_EXAMPLE_NAME_INDEX], example[WHAT_EXAMPLE_TYPE_INDEX], example[WHAT_EXAMPLE_DESC_INDEX], w=max_len))
 
@@ -91,10 +104,14 @@ def example_list():
 def example_run():
     """Run examples"""
     max_len = max([len(x[0]) for x in what_example_list])
+
+    print('   {:<{w}s}\t{}\t{}'.format("        Demo        ", "       Type       ", "Description", w=max_len))
+    print('-' * 80)
+
     for i, example in enumerate(what_example_list, start=1):
         print('{} : {:<{w}s}\t{}\t{}'.format(i, example[WHAT_EXAMPLE_NAME_INDEX], example[WHAT_EXAMPLE_TYPE_INDEX], example[WHAT_EXAMPLE_DESC_INDEX], w=max_len))
 
-    index = input(f"Please input the example index: ")
+    index = input(f"\nPlease input the example index: ")
     while not index.isdigit() or int(index) > len(what_example_list):
         index = input(f"Example [{index}] does not exist. Please try again: ")
 
