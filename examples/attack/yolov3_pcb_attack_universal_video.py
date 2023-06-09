@@ -34,7 +34,9 @@ if __name__ == '__main__':
     colors = np.random.uniform(0, 255, size=(len(classes), 3))
 
     logger.info(f"Read {len(input_video)} images")
-    random.shuffle(input_video)
+
+    # random.shuffle(input_video)
+
     x_train = np.array(input_video[:int(len(input_video) * 0.9)])
     x_test = np.array(input_video[int(len(input_video) * 0.9):])
 
