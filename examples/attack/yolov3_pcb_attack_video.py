@@ -79,6 +79,9 @@ if __name__ == '__main__':
         input_cv_image = cv2.resize(origin_cv_image, (416, 416))
         input_cv_image = np.array(input_cv_image).astype(np.float32) / 255.0
 
+        # Image preprocessing
+        input_cv_image = cv2.cvtColor(input_cv_image, cv2.COLOR_BGR2RGB)
+
         # Yolo inference
         input_cv_image, outs = attack.attack(input_cv_image)
 
@@ -138,6 +141,7 @@ if __name__ == '__main__':
         # for i in range(boxes.shape[0]):
         #     logger.info(f"{classes[labels[i]]}: {probs[i]:.2f}")
 
+        out_img = cv2.cvtColor(out_img, cv2.COLOR_RGB2BGR)
         out_img = draw_bounding_boxes(out_img, boxes, labels, classes, probs);
 
         cv2.namedWindow("result", cv2.WINDOW_NORMAL)

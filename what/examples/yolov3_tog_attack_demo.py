@@ -61,6 +61,9 @@ def yolov3_tog_attack_demo():
         input_cv_image = cv2.resize(origin_cv_image, (416, 416))
         input_cv_image = np.array(input_cv_image).astype(np.float32) / 255.0
 
+        # Image preprocessing
+        input_cv_image = cv2.cvtColor(input_cv_image, cv2.COLOR_BGR2RGB)
+
         # Yolo inference
         input_cv_image, outs = attack.attack(input_cv_image)
 
@@ -88,7 +91,7 @@ def yolov3_tog_attack_demo():
         last_probs = np.copy(probs)
 
         # Draw bounding boxes
-        out_img = cv2.cvtColor(origin_cv_image, cv2.COLOR_RGB2BGR)
+        out_img = cv2.cvtColor(origin_cv_image, cv2.COLOR_BGR2RGB)
         out_img = out_img.astype(np.float32) / 255.0
         height, width, _ = out_img.shape
         noise = attack.noise
@@ -104,6 +107,7 @@ def yolov3_tog_attack_demo():
 
         out_img = (out_img * 255.0).astype(np.uint8)
 
+        out_img = cv2.cvtColor(out_img, cv2.COLOR_RGB2BGR)
         out_img = draw_bounding_boxes(out_img, boxes, labels, classes, probs);
 
         cv2.namedWindow("result", cv2.WINDOW_NORMAL)
