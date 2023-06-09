@@ -5,7 +5,7 @@ Utility functions for WHAT.
 
 ## what.utils.logger.get_logger
 ## what.utils.resize.bilinear_resize
-## what.utils.proj_lp.proj_lp
+## what.utils.proj.proj_lp
 
 '''
 
