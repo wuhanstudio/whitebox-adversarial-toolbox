@@ -1,7 +1,13 @@
 r'''
 WHite-box Adversarial Toolbox (WHAT) is a python library for Deep Learning Security that focuses on realtime white-box attacks.
 
-You can use the cli tool `what` to try real-time adversarial attacks.
+## Installation
+
+```
+pip install whitebox-adversarial-toolbox
+```
+
+Then you can use the cli tool `what` to try real-time adversarial attacks.
 
 ```
 sage: what [OPTIONS] COMMAND [ARGS]...
