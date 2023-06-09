@@ -11,6 +11,8 @@
 
 A Python Library for Deep Learning Security that focuses on Real-time White-box Attacks.
 
+![](docs/images/demo.gif)
+
 ## Installation
 
 ```python
