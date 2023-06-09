@@ -125,4 +125,4 @@ from what import attacks
 from what import utils
 
 # Semantic Version
-__version__ = "0.1.0"
+__version__ = "0.1.1"
