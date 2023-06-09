@@ -22,6 +22,9 @@ class __MyProgressBar__():
 def download_file(file_name, path, url, hash):
     print('Downloading', os.path.join(path, file_name))
 
+    if not os.path.exists(path):
+        os.makedirs(path)
+
     try:
         try:
             urllib.request.urlretrieve(url, os.path.join(path, file_name), __MyProgressBar__())
