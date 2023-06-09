@@ -4,7 +4,7 @@ import hashlib
 import progressbar
 import urllib.request
 
-class MyProgressBar():
+class __MyProgressBar__():
     def __init__(self):
         self.pbar = None
 
@@ -24,7 +24,7 @@ def download_file(file_name, path, url, hash):
 
     try:
         try:
-            urllib.request.urlretrieve(url, os.path.join(path, file_name), MyProgressBar())
+            urllib.request.urlretrieve(url, os.path.join(path, file_name), __MyProgressBar__())
         except Exception as e:
             print(e)
     except (Exception, KeyboardInterrupt):
