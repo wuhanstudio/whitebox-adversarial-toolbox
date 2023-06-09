@@ -3,10 +3,11 @@ from torch import nn
 from torchvision.models import vgg16
 from torchvision.ops import RoIPool
 
-from what.models.detection.frcnn.model.region_proposal_network import RegionProposalNetwork
-from what.models.detection.frcnn.model.faster_rcnn_model import FasterRCNNModel
 from what.models.detection.utils.array_utils import to_numpy, to_tensor
-from what.models.detection.frcnn.utils.config import opt
+
+from .region_proposal_network import RegionProposalNetwork
+from .faster_rcnn_model import FasterRCNNModel
+from ..utils.config import opt
 
 def decom_vgg16(device):
     # the 30th layer of features is relu of conv5_3

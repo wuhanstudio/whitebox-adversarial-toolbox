@@ -6,12 +6,14 @@ import torch
 from torch import nn
 from torchvision.ops import nms
 from torch.nn import functional as F
+
 # from model.utils.nms import non_maximum_suppression
 
-from what.models.detection.frcnn.model.utils.bbox_tools import loc2bbox
-from what.models.detection.frcnn.datasets.dataset import preprocess
 from what.models.detection.utils.array_utils import to_numpy, to_tensor
-from what.models.detection.frcnn.utils.config import opt
+
+from .utils.bbox_tools import loc2bbox
+from ..datasets.dataset import preprocess
+from ..utils.config import opt
 
 def nograd(f):
     def new_f(*args,**kwargs):

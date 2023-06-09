@@ -1,8 +1,9 @@
 from torch.nn import Conv2d, Sequential, ModuleList, ReLU
-from ..nn.mobilenet_v1 import MobileNetV1
 
 from .ssd import SSD
+from ..nn.mobilenet_v1 import MobileNetV1
 from .predictor import Predictor
+
 from . import mobilenet_ssd_config as config
 
 def create_mobilenet_v1_ssd(num_classes, is_test=False):

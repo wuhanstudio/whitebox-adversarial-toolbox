@@ -6,13 +6,15 @@ import torch
 from torch import nn
 from torch.nn import functional as F
 
-from what.models.detection.frcnn.meter import ConfusionMeter, AverageValueMeter
-
-from what.models.detection.frcnn.model.utils.creator_tool import AnchorTargetCreator, ProposalTargetCreator
-from what.models.detection.frcnn.model.faster_rcnn_vgg16 import FasterRCNNVGG16
 from what.models.detection.utils.array_utils import to_numpy, to_scalar, to_tensor
-from what.models.detection.frcnn.utils.config import opt
-from what.models.detection.frcnn.utils.eval_tool import eval_detection_voc
+
+from .model.utils.creator_tool import AnchorTargetCreator, ProposalTargetCreator
+from .model.faster_rcnn_vgg16 import FasterRCNNVGG16
+
+from .meter.confusion_meter import ConfusionMeter
+from .meter.averagevalue_meter import AverageValueMeter
+from .utils.eval_tool import eval_detection_voc
+from .utils.config import opt
 
 LossTuple = namedtuple('LossTuple',
                        ['rpn_loc_loss',

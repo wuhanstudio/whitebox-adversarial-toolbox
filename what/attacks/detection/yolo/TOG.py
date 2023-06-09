@@ -7,7 +7,7 @@ import tensorflow as tf
 tf.compat.v1.disable_eager_execution()
 import keras.backend as K
 
-from what.utils.proj_lp import proj_lp
+from what.utils.proj import proj_lp
 
 class TOGAttack:
     def __init__(self, model, attack_type, classes, init="zero", decay=0.99):

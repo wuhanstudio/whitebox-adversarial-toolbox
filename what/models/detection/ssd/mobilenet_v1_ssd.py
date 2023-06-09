@@ -1,16 +1,17 @@
 import os
 import itertools
-import what.utils.logger as log
 
 import torch
 from torch.optim.lr_scheduler import CosineAnnealingLR
-from .ssd.multibox_loss import MultiboxLoss
-from .utils.misc import freeze_net_layers
-
-from .ssd.mobilenet_v1_ssd_create import create_mobilenet_v1_ssd, create_mobilenet_v1_ssd_predictor
-from .ssd import mobilenet_ssd_config
 
 from what.models.detection.datasets.voc import VOC_CLASS_NAMES
+import what.utils.logger as log
+
+from .ssd.mobilenet_v1_ssd_create import create_mobilenet_v1_ssd, create_mobilenet_v1_ssd_predictor
+from .ssd.multibox_loss import MultiboxLoss
+from .ssd import mobilenet_ssd_config
+
+from .utils.misc import freeze_net_layers
 
 logger = log.get_logger(__name__)
 

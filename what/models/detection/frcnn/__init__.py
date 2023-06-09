@@ -8,3 +8,5 @@ This module implements Faster-RCNN object detection model.
 '''
 
 from what.models.detection.frcnn.faster_rcnn import FasterRCNN
+
+__all__ = ["faster_rcnn"]

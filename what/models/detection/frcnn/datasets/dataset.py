@@ -6,9 +6,10 @@ import numpy as np
 from skimage import transform as sktsf
 from torchvision import transforms as tvtsf
 
-from what.models.detection.frcnn.utils.config import opt
-from what.models.detection.frcnn.datasets.voc_dataset import VOCBboxDataset
-from what.models.detection.frcnn.datasets import util
+from ..datasets.voc_dataset import VOCBboxDataset
+from ..datasets import util
+
+from ..utils.config import opt
 
 def inverse_normalize(img):
     if opt.caffe_pretrain:

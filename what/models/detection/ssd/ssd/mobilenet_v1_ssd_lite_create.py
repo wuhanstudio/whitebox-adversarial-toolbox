@@ -1,9 +1,10 @@
 import torch
 from torch.nn import Conv2d, Sequential, ModuleList, ReLU, BatchNorm2d
-from ..nn.mobilenet_v1 import MobileNetV1
 
+from ..nn.mobilenet_v1 import MobileNetV1
 from .ssd import SSD
 from .predictor import Predictor
+
 from . import mobilenet_ssd_config as config
 
 

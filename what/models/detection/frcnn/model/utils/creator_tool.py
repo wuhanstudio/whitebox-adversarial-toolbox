@@ -2,8 +2,7 @@ import torch
 import numpy as np
 from torchvision.ops import nms
 
-from what.models.detection.frcnn.model.utils.bbox_tools import bbox2loc, bbox_iou, loc2bbox
-
+from .bbox_tools import bbox2loc, bbox_iou, loc2bbox
 
 class ProposalTargetCreator(object):
     """Assign ground truth bounding boxes to given RoIs.

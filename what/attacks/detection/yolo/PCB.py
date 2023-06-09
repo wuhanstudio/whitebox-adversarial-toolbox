@@ -7,7 +7,7 @@ import tensorflow as tf
 tf.compat.v1.disable_eager_execution()
 import keras.backend as K
 
-from what.utils.proj_lp import proj_lp
+from what.utils.proj import proj_lp
 
 class PCBAttack:
     def __init__(self, model, attack_type, classes, init="zero", learning_rate = 4 / 255.0, batch = 1, decay = 0.98):

@@ -2,11 +2,11 @@ import torch
 from torch import nn
 from torch.nn import Conv2d, Sequential, ModuleList, BatchNorm2d
 
+from . import mobilenet_ssd_config as config
+from .ssd import SSD, GraphPath
 
-from what.models.detection.ssd.ssd import SSD, GraphPath
-from what.models.detection.ssd.ssd import mobilenet_ssd_config as config
-from what.models.detection.ssd.ssd.predictor import Predictor
-from what.models.detection.ssd.nn.mobilenet_v2 import MobileNetV2, InvertedResidual
+from ..ssd.predictor import Predictor
+from ..nn.mobilenet_v2 import MobileNetV2, InvertedResidual
 
 
 def SeperableConv2d(in_channels, out_channels, kernel_size=1, stride=1, padding=0, onnx_compatible=False):
