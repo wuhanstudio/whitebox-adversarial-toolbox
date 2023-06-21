@@ -6,6 +6,7 @@ from what.utils.file import get_file
 
 from what.models.detection.ssd.mobilenet_v2_ssd_lite import MobileNetV2SSDLite
 from what.models.detection.utils.box_utils import draw_bounding_boxes
+from what.models.detection.datasets.voc import VOC_CLASS_NAMES
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
@@ -30,6 +31,7 @@ if not os.path.isfile(os.path.join(WHAT_MODEL_PATH, what_model_list[index][WHAT_
 
 # Initialize the model
 model = MobileNetV2SSDLite(os.path.join(WHAT_MODEL_PATH, what_model_list[index][WHAT_MODEL_FILE_INDEX]),
+                           VOC_CLASS_NAMES,
                            is_test=True,
                            device=device)
 

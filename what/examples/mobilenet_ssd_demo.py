@@ -6,6 +6,7 @@ from what.utils.file import get_file
 
 from what.models.detection.ssd.mobilenet_v1_ssd import MobileNetV1SSD
 from what.models.detection.ssd.mobilenet_v2_ssd_lite import MobileNetV2SSDLite
+from what.models.detection.datasets.voc import VOC_CLASS_NAMES
 
 from what.models.detection.utils.box_utils import draw_bounding_boxes
 
@@ -40,14 +41,16 @@ def mobilenet_ssd_inference_demo():
     if index == 0:
         # Initialize the model
         model = MobileNetV1SSD(os.path.join(WHAT_MODEL_PATH, what_ssd_model_list[index][WHAT_MODEL_FILE_INDEX]),
-                            is_test=True,
-                            device=device)
+                               VOC_CLASS_NAMES,
+                               is_test=True,
+                               device=device)
 
     if index == 1:
         # Initialize the model
-        model = MobileNetV2SSDLite(os.path.join(WHAT_MODEL_PATH, what_model_list[index][WHAT_MODEL_FILE_INDEX]),
-                                is_test=True,
-                                device=device)
+        model = MobileNetV2SSDLite(os.path.join(WHAT_MODEL_PATH, what_ssd_model_list[index][WHAT_MODEL_FILE_INDEX]),
+                                   VOC_CLASS_NAMES,
+                                   is_test=True,
+                                   device=device)
 
     video = input(f"Please input the OpenCV capture device (e.g. 0, 1, 2): ")
 
