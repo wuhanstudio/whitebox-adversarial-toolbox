@@ -30,7 +30,7 @@ if not os.path.isfile(os.path.join(WHAT_MODEL_PATH, what_yolov4_model_list[index
                 what_yolov4_model_list[index][WHAT_MODEL_HASH_INDEX])
 
 # Darknet
-model = YOLOV4(COCO_CLASS_NAMES, os.path.join(WHAT_MODEL_PATH, what_yolov4_model_list[0][WHAT_MODEL_FILE_INDEX]))
+model = YOLOV4(COCO_CLASS_NAMES, os.path.join(WHAT_MODEL_PATH, what_yolov4_model_list[index][WHAT_MODEL_FILE_INDEX]))
 
 # You can also use your own model
 # model = YOLOV4(COCO_CLASS_NAMES, "models/yolov4.h5")
