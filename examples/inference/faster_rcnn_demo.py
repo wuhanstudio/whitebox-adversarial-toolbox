@@ -11,14 +11,19 @@ from what.utils.file import get_file
 from what.models.detection.utils.box_utils import draw_bounding_boxes
 from what.models.detection.datasets.voc import VOC_CLASS_NAMES
 
-# Download the model first if not exists
 # Check what_model_list for all available models
 index = 8
-if not os.path.isfile(os.path.join(WHAT_MODEL_PATH, what_model_list[index][WHAT_MODEL_FILE_INDEX])):
-    get_file(what_model_list[index][WHAT_MODEL_FILE_INDEX],
-                WHAT_MODEL_PATH,
-                what_model_list[index][WHAT_MODEL_URL_INDEX],
-                what_model_list[index][WHAT_MODEL_HASH_INDEX])
+
+# Download the model first if not exists
+WHAT_MODEL_FILE = what_model_list[index][WHAT_MODEL_FILE_INDEX]
+WHAT_MODEL_URL  = what_model_list[index][WHAT_MODEL_URL_INDEX]
+WHAT_MODEL_HASH = what_model_list[index][WHAT_MODEL_HASH_INDEX]
+
+if not os.path.isfile(os.path.join(WHAT_MODEL_PATH, WHAT_MODEL_FILE)):
+    get_file(WHAT_MODEL_FILE,
+             WHAT_MODEL_PATH,
+             WHAT_MODEL_URL,
+             WHAT_MODEL_HASH)
 
 video = input(f"Please input the OpenCV capture device (e.g. 0, 1, 2): ")
 

@@ -23,11 +23,15 @@ cap = cv2.VideoCapture(int(video))
 index = 1
 
 # Download the model first if not exists
-if not os.path.isfile(os.path.join(WHAT_MODEL_PATH, what_yolov3_model_list[index][WHAT_MODEL_FILE_INDEX])):
-    get_file(what_yolov3_model_list[index][WHAT_MODEL_FILE_INDEX],
-                WHAT_MODEL_PATH,
-                what_yolov3_model_list[index][WHAT_MODEL_URL_INDEX],
-                what_yolov3_model_list[index][WHAT_MODEL_HASH_INDEX])
+WHAT_YOLOV3_MODEL_FILE = what_yolov3_model_list[index][WHAT_MODEL_FILE_INDEX]
+WHAT_YOLOV3_MODEL_URL  = what_yolov3_model_list[index][WHAT_MODEL_URL_INDEX]
+WHAT_YOLOV3_MODEL_HASH = what_yolov3_model_list[index][WHAT_MODEL_HASH_INDEX]
+
+if not os.path.isfile(os.path.join(WHAT_MODEL_PATH, WHAT_YOLOV3_MODEL_FILE)):
+    get_file(WHAT_YOLOV3_MODEL_FILE,
+             WHAT_MODEL_PATH,
+             WHAT_YOLOV3_MODEL_URL,
+             WHAT_YOLOV3_MODEL_HASH)
 
 # MobileNet
 model = YOLOV3(COCO_CLASS_NAMES, os.path.join(WHAT_MODEL_PATH, what_yolov3_model_list[index][WHAT_MODEL_FILE_INDEX]))

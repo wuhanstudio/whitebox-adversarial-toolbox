@@ -18,6 +18,20 @@ logger = log.get_logger(__name__)
 # Target Model
 what_yolov3_model_list = what_model_list[0:4]
 
+# Check what_model_list for all supported models
+index = 3
+
+# Download the model first if not exists
+WHAT_YOLOV3_MODEL_FILE = what_yolov3_model_list[index][WHAT_MODEL_FILE_INDEX]
+WHAT_YOLOV3_MODEL_URL  = what_yolov3_model_list[index][WHAT_MODEL_URL_INDEX]
+WHAT_YOLOV3_MODEL_HASH = what_yolov3_model_list[index][WHAT_MODEL_HASH_INDEX]
+
+if not os.path.isfile(os.path.join(WHAT_MODEL_PATH, WHAT_YOLOV3_MODEL_FILE)):
+    get_file(WHAT_YOLOV3_MODEL_FILE,
+             WHAT_MODEL_PATH,
+             WHAT_YOLOV3_MODEL_URL,
+             WHAT_YOLOV3_MODEL_HASH)
+
 if __name__ == '__main__':
     # Read video frames
     input_video = []
@@ -39,16 +53,6 @@ if __name__ == '__main__':
 
     x_train = np.array(input_video[:int(len(input_video) * 0.9)])
     x_test = np.array(input_video[int(len(input_video) * 0.9):])
-
-    # Check what_model_list for all supported models
-    index = 3
-
-    # Download the model first if not exists
-    if not os.path.isfile(os.path.join(WHAT_MODEL_PATH, what_yolov3_model_list[index][WHAT_MODEL_FILE_INDEX])):
-        get_file(what_yolov3_model_list[index][WHAT_MODEL_FILE_INDEX],
-                    WHAT_MODEL_PATH,
-                    what_yolov3_model_list[index][WHAT_MODEL_URL_INDEX],
-                    what_yolov3_model_list[index][WHAT_MODEL_HASH_INDEX])
 
     # Adversarial Attack
     model_path = os.path.join(WHAT_MODEL_PATH, what_yolov3_model_list[index][WHAT_MODEL_FILE_INDEX])

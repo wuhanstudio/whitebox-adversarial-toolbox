@@ -23,11 +23,15 @@ cap = cv2.VideoCapture(int(video))
 index = 1
 
 # Download the model first if not exists
-if not os.path.isfile(os.path.join(WHAT_MODEL_PATH, what_yolov4_model_list[index][WHAT_MODEL_FILE_INDEX])):
-    get_file(what_yolov4_model_list[index][WHAT_MODEL_FILE_INDEX],
-                WHAT_MODEL_PATH,
-                what_yolov4_model_list[index][WHAT_MODEL_URL_INDEX],
-                what_yolov4_model_list[index][WHAT_MODEL_HASH_INDEX])
+WHAT_YOLOV4_MODEL_FILE = what_yolov4_model_list[index][WHAT_MODEL_FILE_INDEX]
+WHAT_YOLOV4_MODEL_URL  = what_yolov4_model_list[index][WHAT_MODEL_URL_INDEX]
+WHAT_YOLOV4_MODEL_HASH = what_yolov4_model_list[index][WHAT_MODEL_HASH_INDEX]
+
+if not os.path.isfile(os.path.join(WHAT_MODEL_PATH, WHAT_YOLOV4_MODEL_FILE)):
+    get_file(WHAT_YOLOV4_MODEL_FILE,
+             WHAT_MODEL_PATH,
+             WHAT_YOLOV4_MODEL_URL,
+             WHAT_YOLOV4_MODEL_HASH)
 
 # Darknet
 model = YOLOV4_TINY(COCO_CLASS_NAMES, os.path.join(WHAT_MODEL_PATH, what_yolov4_model_list[1][WHAT_MODEL_FILE_INDEX]))
