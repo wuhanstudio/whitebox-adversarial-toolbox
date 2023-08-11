@@ -30,11 +30,15 @@ def yolov3_inference_demo():
     index = int(index) - 1
 
     # Download the model first if not exists
-    if not os.path.isfile(os.path.join(WHAT_MODEL_PATH, what_yolov3_model_list[index][WHAT_MODEL_FILE_INDEX])):
-        get_file(what_yolov3_model_list[index][WHAT_MODEL_FILE_INDEX],
-                 WHAT_MODEL_PATH,
-                 what_yolov3_model_list[index][WHAT_MODEL_URL_INDEX],
-                 what_yolov3_model_list[index][WHAT_MODEL_HASH_INDEX])
+    WHAT_YOLOV3_MODEL_FILE = what_yolov3_model_list[index][WHAT_MODEL_FILE_INDEX]
+    WHAT_YOLOV3_MODEL_URL  = what_yolov3_model_list[index][WHAT_MODEL_URL_INDEX]
+    WHAT_YOLOV3_MODEL_HASH = what_yolov3_model_list[index][WHAT_MODEL_HASH_INDEX]
+
+    if not os.path.isfile(os.path.join(WHAT_MODEL_PATH, WHAT_YOLOV3_MODEL_FILE)):
+        get_file(WHAT_YOLOV3_MODEL_FILE,
+                WHAT_MODEL_PATH,
+                WHAT_YOLOV3_MODEL_URL,
+                WHAT_YOLOV3_MODEL_HASH)
 
     if index == 0 or index == 1:
         model = YOLOV3(COCO_CLASS_NAMES, os.path.join(WHAT_MODEL_PATH, what_yolov3_model_list[index][WHAT_MODEL_FILE_INDEX]))
@@ -66,7 +70,7 @@ def yolov3_inference_demo():
             image = cv2.cvtColor(orig_image, cv2.COLOR_BGR2RGB)
 
             # Run inference
-            images, boxes, labels, probs = model.predict(image, 10, 0.4)
+            images, boxes, labels, probs = model.predict(image)
             image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
 
             # Draw bounding boxes onto the image
