@@ -49,7 +49,7 @@ while True:
     image = cv2.cvtColor(orig_image, cv2.COLOR_BGR2RGB)
 
     # Run inference
-    images, boxes, labels, probs = model.predict(image, 10, 0.4)
+    images, boxes, labels, probs = model.predict(image)
     image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
 
     # Draw bounding boxes onto the image
