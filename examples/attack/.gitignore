@@ -1,6 +1,5 @@
 models/
 logs/
-noise/
 *.pth
 *.avi
 *.npy
