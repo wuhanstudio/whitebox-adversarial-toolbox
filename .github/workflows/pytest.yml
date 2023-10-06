@@ -24,8 +24,8 @@ jobs:
           python-version: '3.11'
 
       # ADJUST THIS: install all dependencies (including pdoc)
-      - run: pip install pdoc pytest lark carla
-      - run: pip install -e .
+      - run: python3 -m pip install pdoc pytest lark carla
+      - run: python3 -m pip install -e .
       # ADJUST THIS: build your documentation into docs/.
       # We use a custom build script for pdoc itself, ideally you just run `pdoc -o docs/ ...` here.
       - run: pytest
