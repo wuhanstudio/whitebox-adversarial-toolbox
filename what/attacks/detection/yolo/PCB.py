@@ -10,7 +10,7 @@ import keras.backend as K
 from what.utils.proj import proj_lp
 
 class PCBAttack:
-    def __init__(self, model, attack_type, classes, init="zero", learning_rate = 4 / 255.0, batch = 1, decay = 0.98):
+    def __init__(self, model, attack_type, classes, init="zero", learning_rate = 4 / 255.0, batch = 1, decay = 0.98, custom_objects = None):
         self.classes = len(classes)
         self.epsilon = 1
         self.graph = tf.compat.v1.get_default_graph()
@@ -24,7 +24,7 @@ class PCBAttack:
         self.adv_patch_boxes = []
         self.fixed = True
 
-        self.model = load_model(model)
+        self.model = load_model(model, custom_objects=custom_objects)
         self.model.summary()
         self.attack_type = attack_type
 
