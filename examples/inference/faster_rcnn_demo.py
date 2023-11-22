@@ -38,7 +38,7 @@ cap = cv2.VideoCapture(int(video))
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 model = FasterRCNN(device=device)
-model.load(os.path.join(WHAT_MODEL_PATH, what_model_list[8][WHAT_MODEL_FILE_INDEX]), map_location=device)
+model.load(os.path.join(WHAT_MODEL_PATH, WHAT_MODEL_FILE), map_location=device)
 
 while True:
     _, orig_image = cap.read()

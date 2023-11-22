@@ -34,7 +34,7 @@ if not os.path.isfile(os.path.join(WHAT_MODEL_PATH, WHAT_YOLOV3_MODEL_FILE)):
              WHAT_YOLOV3_MODEL_HASH)
 
 # MobileNet
-model = YOLOV3(COCO_CLASS_NAMES, os.path.join(WHAT_MODEL_PATH, what_yolov3_model_list[index][WHAT_MODEL_FILE_INDEX]))
+model = YOLOV3(COCO_CLASS_NAMES, os.path.join(WHAT_MODEL_PATH, WHAT_YOLOV3_MODEL_FILE))
 
 # You can also use your own model
 # model = YOLOV3(COCO_CLASS_NAMES, "models/yolov3.h5")

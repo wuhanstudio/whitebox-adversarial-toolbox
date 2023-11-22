@@ -41,10 +41,10 @@ def yolov3_inference_demo():
                 WHAT_YOLOV3_MODEL_HASH)
 
     if index == 0 or index == 1:
-        model = YOLOV3(COCO_CLASS_NAMES, os.path.join(WHAT_MODEL_PATH, what_yolov3_model_list[index][WHAT_MODEL_FILE_INDEX]))
+        model = YOLOV3(COCO_CLASS_NAMES, os.path.join(WHAT_MODEL_PATH, WHAT_YOLOV3_MODEL_FILE))
 
     if index == 2 or index == 3:
-        model = YOLOV3_TINY(COCO_CLASS_NAMES, os.path.join(WHAT_MODEL_PATH, what_yolov3_model_list[index][WHAT_MODEL_FILE_INDEX]))
+        model = YOLOV3_TINY(COCO_CLASS_NAMES, os.path.join(WHAT_MODEL_PATH, WHAT_YOLOV3_MODEL_FILE))
 
     video = input(f"Please input the OpenCV capture device (e.g. 0, 1, 2): ")
 

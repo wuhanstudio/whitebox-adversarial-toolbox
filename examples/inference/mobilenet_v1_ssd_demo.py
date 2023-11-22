@@ -35,7 +35,7 @@ if not os.path.isfile(os.path.join(WHAT_MODEL_PATH, WHAT_MODEL_FILE)):
              WHAT_MODEL_HASH)
 
 # Initialize the model
-model = MobileNetV1SSD(os.path.join(WHAT_MODEL_PATH, what_model_list[index][WHAT_MODEL_FILE_INDEX]),
+model = MobileNetV1SSD(os.path.join(WHAT_MODEL_PATH, WHAT_MODEL_FILE),
                        VOC_CLASS_NAMES,
                        is_test=True,
                        device=device)
