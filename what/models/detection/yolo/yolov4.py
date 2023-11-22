@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
 
+import tensorflow as tf
 from keras.models import load_model
 import tensorflow.keras.backend as K
 
@@ -8,13 +9,11 @@ from what.models.detection.utils.time_utils import Timer
 
 from .utils.yolo_utils import yolo_process_output, yolov4_anchors
 
-def mish(x):
-    return x * K.tanh(K.softplus(x))
-
 class YOLOV4:
     def __init__(self, class_names, model_path):
         self.model = load_model(model_path, custom_objects = {
-            'mish': mish
+            'mish': lambda x: x * K.tanh(K.softplus(x)),
+            'tf': tf
         })
         self.class_names = class_names
         self.timer = Timer()
