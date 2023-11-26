@@ -69,11 +69,12 @@ def frcnn_inference_demo():
         boxes[:, 2] = box_w / width
         boxes[:, 3] = box_h / height
 
-        output = draw_bounding_boxes(orig_image,
-                boxes,
-                labels[0],
-                VOC_CLASS_NAMES[1:],
-                scores[0])
+        if len(boxes) > 0:
+            output = draw_bounding_boxes(orig_image,
+                    boxes,
+                    labels[0],
+                    VOC_CLASS_NAMES[1:],
+                    scores[0])
 
         cv2.imshow('Faster RCNN Demo', output)
 

@@ -74,7 +74,8 @@ def yolov4_inference_demo():
             image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
 
             # Draw bounding boxes onto the image
-            output = draw_bounding_boxes(image, boxes, labels, model.class_names, probs);
+            if len(boxes) > 0:
+                output = draw_bounding_boxes(image, boxes, labels, model.class_names, probs);
 
             cv2.imshow('YOLOv4 Demo', image)
 

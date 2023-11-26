@@ -108,7 +108,8 @@ def yolov3_tog_attack_demo():
         out_img = (out_img * 255.0).astype(np.uint8)
 
         out_img = cv2.cvtColor(out_img, cv2.COLOR_RGB2BGR)
-        out_img = draw_bounding_boxes(out_img, boxes, labels, classes, probs);
+        if len(boxes) > 0:
+            out_img = draw_bounding_boxes(out_img, boxes, labels, classes, probs);
 
         cv2.namedWindow("result", cv2.WINDOW_NORMAL)
         cv2.imshow("result", out_img)

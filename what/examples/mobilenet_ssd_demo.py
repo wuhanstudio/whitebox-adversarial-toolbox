@@ -78,7 +78,8 @@ def mobilenet_ssd_inference_demo():
             # Draw bounding boxes onto the image
             height, width, _ = image.shape
 
-            output = draw_bounding_boxes(image, boxes, labels, model.class_names, probs);
+            if len(boxes) > 0:
+                output = draw_bounding_boxes(image, boxes, labels, model.class_names, probs);
 
             cv2.imshow('MobileNet SSD Demo', output)
 

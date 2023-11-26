@@ -12,6 +12,7 @@ requires = [
     "matplotlib",
     "click",
     "progressbar",
+    "loguru"
 ]
 build-backend = "setuptools.build_meta"
 

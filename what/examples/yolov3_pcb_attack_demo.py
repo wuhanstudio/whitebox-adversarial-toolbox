@@ -111,7 +111,8 @@ def yolov3_pcb_attack_demo():
         #     logger.info(f"{classes[labels[i]]}: {probs[i]:.2f}")
 
         out_img = cv2.cvtColor(out_img, cv2.COLOR_RGB2BGR)
-        out_img = draw_bounding_boxes(out_img, boxes, labels, classes, probs);
+        if len(boxes) > 0:
+            out_img = draw_bounding_boxes(out_img, boxes, labels, classes, probs);
 
         cv2.namedWindow("result", cv2.WINDOW_NORMAL)
         cv2.imshow("result", out_img)
