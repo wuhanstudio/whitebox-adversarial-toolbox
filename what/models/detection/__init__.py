@@ -4,6 +4,7 @@ This module implements several object detection models and provides some utility
 ## what.models.detection.yolo
 ## what.models.detection.ssd
 ## what.models.detection.frcnn
+## what.models.detection.yolox
 '''
 
 from what.models.detection import yolo

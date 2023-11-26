@@ -60,6 +60,10 @@ Available models:
 [x] 7 : SSD         ( MobileNet  v1 )   Object Detection        SSD pretrained on VOC-2012 dataset.
 [x] 8 : SSD         ( MobileNet  v2 )   Object Detection        SSD pretrained on VOC-2012 dataset.
 [x] 9 : FasterRCNN  (     VGG16     )   Object Detection        Faster-RCNN pretrained on VOC-2012 dataset.
+[x] 10 : YOLOX X-Large                  Object Detection        YOLOX-X pretrained on MS COCO dataset.
+[x] 11 : YOLOX Large                    Object Detection        YOLOX-L pretrained on MS COCO dataset.
+[x] 12 : YOLOX Medium                   Object Detection        YOLOX-M pretrained on MS COCO dataset.
+[x] 13 : YOLOX Small                    Object Detection        YOLOX-S pretrained on MS COCO dataset.
 ```
 
 ## A Man-in-the-Middle Hardware Attack
