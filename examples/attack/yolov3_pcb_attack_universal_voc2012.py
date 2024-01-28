@@ -1,6 +1,8 @@
 import cv2
+import time
 import datetime
 import numpy as np
+from tqdm import tqdm
 
 from what.models.detection.datasets.coco import COCO_CLASS_NAMES
 from what.models.detection.utils.box_utils import draw_bounding_boxes
@@ -17,16 +19,17 @@ import fiftyone.zoo as foz
 from what.cli.model import *
 from what.utils.file import get_file
 
-n_iteration = 50
+n_iteration = 500
 prefix = './'
 
+NUM_IMGS = 1000
 show_image = False
 
 # Logging
 logger = log.get_logger(__name__)
 
 # Tensorboard
-pcb_log_dir = prefix + 'logs/pcb-universal/' + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+pcb_log_dir = prefix + 'logs/pcb-universal/zero_init/' + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
 tb = TensorBoardLogger(pcb_log_dir)
 
 # Target Model
@@ -49,7 +52,7 @@ if not os.path.isfile(os.path.join(WHAT_MODEL_PATH, WHAT_YOLOV3_MODEL_FILE)):
 if __name__ == '__main__':
 
     # Load Training Dataset from FiftyOne
-    train_dataset = foz.load_zoo_dataset("voc-2012", split="validation")
+    train_dataset = foz.load_zoo_dataset("voc-2012", split="validation")[0:NUM_IMGS]
     img_paths = train_dataset.values("filepath")
 
     classes = COCO_CLASS_NAMES
@@ -63,7 +66,7 @@ if __name__ == '__main__':
 
     origin_outs = []
 
-    for i in range(len(img_paths)):
+    for i in tqdm(range(len(img_paths))):
         img_path = img_paths[i]
 
         img = cv2.imread(str(img_path))
@@ -85,7 +88,8 @@ if __name__ == '__main__':
         res_mean_list = []
         boxes_list = []
 
-        for i in range(len(img_paths)):
+        attack_time = []
+        for i in tqdm(range(len(img_paths))):
             img_path = img_paths[i]
 
             img = cv2.imread(str(img_path))
@@ -96,8 +100,10 @@ if __name__ == '__main__':
             input_cv_image = np.array(input_cv_image).astype(np.float32) / 255.0
 
             # Yolo inference
+            start_time = time.time()
             input_cv_image, outs = attack.attack(input_cv_image)
-
+            attack_time.append(time.time() - start_time)
+    
             boxes, labels, probs = yolo_process_output(outs, yolov3_tiny_anchors, len(classes))
 
             boxes_list.append(len(boxes))
@@ -142,6 +148,8 @@ if __name__ == '__main__':
                 if (cv2.waitKey(0) & 0xFF == ord('q')):
                     break
 
+        print("FPS:", 1 / np.mean(attack_time))
+        tb.log_scalar('attack time', np.mean(attack_time), n)
         tb.log_scalar('mean confidence increase', np.mean(res_mean_list), n)
         tb.log_scalar('boxes', np.mean(boxes_list), n)
 

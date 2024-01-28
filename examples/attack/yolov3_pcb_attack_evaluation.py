@@ -1,4 +1,5 @@
 import cv2
+import time
 import datetime
 import numpy as np
 
@@ -23,7 +24,8 @@ prefix = './'
 logger = log.get_logger(__name__)
 
 # Tensorboard
-pcb_log_dir = prefix + 'logs/b/decay/0.99/' + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+pcb_log_dir = prefix + 'logs/pcb/uniform_init/decay/0.98/' + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+# pcb_log_dir = prefix + 'logs/pcb/zero_init/decay/0.98/' + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
 tb = TensorBoardLogger(pcb_log_dir)
 
 # Target Model
@@ -49,18 +51,19 @@ if __name__ == '__main__':
 
     colors = np.random.uniform(0, 255, size=(len(classes), 3))
 
-    origin_cv_image = cv2.imread(prefix + 'demo.jpg')
+    origin_cv_image = cv2.imread(prefix + 'demo.png')
     origin_cv_image = cv2.cvtColor(origin_cv_image, cv2.COLOR_BGR2RGB)
 
     # Adversarial Attack
     model_path = os.path.join(WHAT_MODEL_PATH, what_yolov3_model_list[index][WHAT_MODEL_FILE_INDEX])
-    attack = PCBAttack(model_path, "multi_untargeted", classes, decay=0.99)
+    attack = PCBAttack(model_path, "multi_untargeted", classes, init="uniform", decay=0.98)
     attack.fixed = False
 
     last_outs = None
     last_boxes = None
     last_probs = None
 
+    attack_time = []
     for n in range(0, n_iteration):
         logger.info(f"Iteration: {n}")
 
@@ -69,7 +72,12 @@ if __name__ == '__main__':
         input_cv_image = np.array(input_cv_image).astype(np.float32) / 255.0
 
         # Yolo inference
+        start_time = time.time()
         input_cv_image, outs = attack.attack(input_cv_image)
+        attack_time.append(time.time() - start_time)
+
+        tb.log_scalar('attack time', 1.0 / attack_time[-1], n)
+        print("FPS:", 1.0 / attack_time[-1])
 
         if last_outs is not None:
             res_list = []
@@ -132,6 +140,7 @@ if __name__ == '__main__':
 
         if (cv2.waitKey(1) & 0xFF == ord('q')):
             break
-
+    
+    print("Average FPS:", 1.0 / np.mean(attack_time))
     logger.info("Perturbation saved to noise.npy")
     np.save(prefix + 'noise/noise.npy', attack.noise)
