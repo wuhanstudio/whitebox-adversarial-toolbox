@@ -10,7 +10,7 @@ import keras.backend as K
 from what.utils.proj import proj_lp
 
 class TOGAttack:
-    def __init__(self, model, classes, init="zero", decay=1.00):
+    def __init__(self, model, attack_type, classes, init="zero", decay=0.99):
         self.classes = len(classes)
         self.epsilon = 1
         self.graph = tf.compat.v1.get_default_graph()
@@ -26,6 +26,7 @@ class TOGAttack:
 
         self.model = load_model(model)
         self.model.summary()
+        self.attack_type = attack_type
 
         self.delta = 0
         loss = 0

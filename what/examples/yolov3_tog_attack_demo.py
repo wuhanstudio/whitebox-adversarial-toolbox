@@ -31,7 +31,7 @@ def yolov3_tog_attack_demo():
                     what_yolov3_model_list[index][WHAT_MODEL_URL_INDEX],
                     what_yolov3_model_list[index][WHAT_MODEL_HASH_INDEX])
 
-    attack = TOGAttack(os.path.join(WHAT_MODEL_PATH, what_yolov3_model_list[index][WHAT_MODEL_FILE_INDEX]), "multi_untargeted", classes)
+    attack = TOGAttack(os.path.join(WHAT_MODEL_PATH, what_yolov3_model_list[index][WHAT_MODEL_FILE_INDEX]), classes)
     attack.fixed = False
 
     last_outs = None

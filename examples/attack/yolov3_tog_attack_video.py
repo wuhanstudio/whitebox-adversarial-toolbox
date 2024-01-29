@@ -50,7 +50,7 @@ if __name__ == '__main__':
 
     colors = np.random.uniform(0, 255, size=(len(classes), 3))
 
-    attack = TOGAttack(os.path.join(WHAT_MODEL_PATH, what_yolov3_model_list[index][WHAT_MODEL_FILE_INDEX]), "multi_untargeted", classes)
+    attack = TOGAttack(os.path.join(WHAT_MODEL_PATH, what_yolov3_model_list[index][WHAT_MODEL_FILE_INDEX]), classes)
     attack.fixed = False
 
     last_outs = None

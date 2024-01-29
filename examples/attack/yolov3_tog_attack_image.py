@@ -47,7 +47,7 @@ if __name__ == '__main__':
 
     # Adversarial Attack
     model_path = os.path.join(WHAT_MODEL_PATH, what_yolov3_model_list[index][WHAT_MODEL_FILE_INDEX])
-    attack = TOGAttack(model_path, "multi_untargeted", classes)
+    attack = TOGAttack(model_path, classes)
     attack.fixed = False
 
     for n in range(n_iteration):
