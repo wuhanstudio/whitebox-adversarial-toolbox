@@ -7,6 +7,7 @@ from what.models.detection.utils.box_utils import draw_bounding_boxes
 from what.models.detection.yolo.utils.yolo_utils import yolo_process_output, yolov3_anchors, yolov3_tiny_anchors
 
 from what.models.detection.yolo.yolov3_tiny import YOLOV3_TINY
+from what.models.detection.yolo.yolov3 import YOLOV3
 
 from what.cli.model import *
 from what.utils.file import get_file
@@ -90,6 +91,7 @@ if not os.path.isfile(os.path.join(WHAT_MODEL_PATH, WHAT_YOLOV3_MODEL_FILE)):
              WHAT_YOLOV3_MODEL_URL,
              WHAT_YOLOV3_MODEL_HASH)
 
+model = YOLOV3(COCO_CLASS_NAMES, os.path.join(WHAT_MODEL_PATH, WHAT_YOLOV3_MODEL_FILE))
 noise = np.load('noise.npy')
 
 if __name__ == '__main__':
