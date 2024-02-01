@@ -6,7 +6,7 @@ from what.models.detection.datasets.coco import COCO_CLASS_NAMES
 from what.models.detection.utils.box_utils import draw_bounding_boxes
 from what.models.detection.yolo.utils.yolo_utils import yolo_process_output, yolov3_anchors
 
-from what.attacks.detection.yolo.PCB import PCBAttack
+from what.attacks.detection.yolo.TOG import TOGAttack
 from what.utils.resize import bilinear_resize
 import what.utils.logger as log
 
@@ -17,11 +17,11 @@ from what.utils.logger import TensorBoardLogger
 # Loggingc
 logger = log.get_logger(__name__)
 
-CARLA_VIDEO_INDEX = 19
+CARLA_VIDEO_INDEX = 2
 
 # Tensorboard
-pcb_log_dir = f'logs/pcb-universal/carla_{CARLA_VIDEO_INDEX:04d}/{datetime.datetime.now().strftime("%Y%m%d-%H%M%S")}'
-tb = TensorBoardLogger(pcb_log_dir)
+tog_log_dir = f'logs/tog-universal/carla_{CARLA_VIDEO_INDEX:04d}/{datetime.datetime.now().strftime("%Y%m%d-%H%M%S")}'
+tb = TensorBoardLogger(tog_log_dir)
 
 n_iteration = 100
 
@@ -65,7 +65,7 @@ if __name__ == '__main__':
 
     # Adversarial Attack
     model_path = os.path.join(WHAT_MODEL_PATH, what_yolov3_model_list[index][WHAT_MODEL_FILE_INDEX])
-    attack = PCBAttack(model_path, "multi_untargeted", classes, learning_rate=0.001, decay=0.98, batch=len(x_train))
+    attack = TOGAttack(model_path, classes)
     attack.fixed = False
 
     logger.info(f"Train: {len(x_train)}")
@@ -142,4 +142,4 @@ if __name__ == '__main__':
 
         if (n+1) == 1 or (n+1) == 5 or (n+1) % 10 == 0:
             logger.info(f"Perturbation saved to noise_{CARLA_VIDEO_INDEX:04d}_{n}.npy")
-            np.save(f"noise/noise_pcb_{CARLA_VIDEO_INDEX:04d}_{n}.npy", attack.noise)
+            np.save(f"noise/noise_tog_{CARLA_VIDEO_INDEX:04d}_{n}.npy", attack.noise)
