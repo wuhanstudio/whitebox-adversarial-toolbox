@@ -99,9 +99,11 @@ if __name__ == '__main__':
                     indexes = indexes.flatten()
                     tb.log_scalar('box variation', (len(boxes) + len(last_boxes) - len(indexes)) / len(boxes), n)
             elif last_boxes.size == 0 and boxes.size == 0:
-                tb.log_scalar('box variation', 0.0, n)
-            else:
+                # No bounding boxes, all consistent
                 tb.log_scalar('box variation', 1.0, n)
+            else:
+                # Either one is empty, none consistent
+                tb.log_scalar('box variation', 0.0, n)
         else:
             tb.log_scalar('box variation', 1.0, n)
 
