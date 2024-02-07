@@ -72,9 +72,9 @@ The Universal Adversarial Perturbation (UAP) can be deployed using a Man-in-the-
 
 [[ Talk ]](https://minm.wuhanstudio.uk) [[ Video ]](https://youtu.be/OvIpe-R3ZS8) [[ Paper ]](https://arxiv.org/abs/2208.07174) [[ Code ]](https://github.com/wuhanstudio/adversarial-camera)
 
-![](https://github.com/wuhanstudio/adversarial-camera/raw/master/doc/demo.png)
+[![](https://github.com/wuhanstudio/adversarial-camera/raw/master/doc/demo.png)](https://github.com/wuhanstudio/adversarial-camera)
 
-![](https://github.com/wuhanstudio/adversarial-camera/raw/master/doc/demo.jpg)
+[![](https://github.com/wuhanstudio/adversarial-camera/raw/master/doc/demo.jpg)](https://github.com/wuhanstudio/adversarial-camera)
 
 The Man-in-the-Middle Attack consists of two steps:
 
