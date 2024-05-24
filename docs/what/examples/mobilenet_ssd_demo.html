@@ -37,7 +37,7 @@
     </ul>
 
 
-            <footer>White-box Adversarial Toolbox v0.2.0</footer>
+            <footer>White-box Adversarial Toolbox v0.2.1</footer>
 
         <a class="attribution" title="pdoc: Python API documentation generator" href="https://pdoc.dev" target="_blank">
             built with <span class="visually-hidden">pdoc</span><img
@@ -136,18 +136,19 @@
 </span><span id="L-78"><a href="#L-78"><span class="linenos">78</span></a>            <span class="c1"># Draw bounding boxes onto the image</span>
 </span><span id="L-79"><a href="#L-79"><span class="linenos">79</span></a>            <span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">shape</span>
 </span><span id="L-80"><a href="#L-80"><span class="linenos">80</span></a>
-</span><span id="L-81"><a href="#L-81"><span class="linenos">81</span></a>            <span class="n">output</span> <span class="o">=</span> <span class="n">draw_bounding_boxes</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">boxes</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">class_names</span><span class="p">,</span> <span class="n">probs</span><span class="p">);</span>
-</span><span id="L-82"><a href="#L-82"><span class="linenos">82</span></a>
-</span><span id="L-83"><a href="#L-83"><span class="linenos">83</span></a>            <span class="n">cv2</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="s1">&#39;MobileNet SSD Demo&#39;</span><span class="p">,</span> <span class="n">output</span><span class="p">)</span>
-</span><span id="L-84"><a href="#L-84"><span class="linenos">84</span></a>
-</span><span id="L-85"><a href="#L-85"><span class="linenos">85</span></a>            <span class="k">if</span> <span class="n">cv2</span><span class="o">.</span><span class="n">waitKey</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xFF</span> <span class="o">==</span> <span class="nb">ord</span><span class="p">(</span><span class="s1">&#39;q&#39;</span><span class="p">):</span>
-</span><span id="L-86"><a href="#L-86"><span class="linenos">86</span></a>                <span class="k">break</span>
-</span><span id="L-87"><a href="#L-87"><span class="linenos">87</span></a>
-</span><span id="L-88"><a href="#L-88"><span class="linenos">88</span></a>        <span class="n">cap</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
-</span><span id="L-89"><a href="#L-89"><span class="linenos">89</span></a>        <span class="n">cv2</span><span class="o">.</span><span class="n">destroyAllWindows</span><span class="p">()</span>
-</span><span id="L-90"><a href="#L-90"><span class="linenos">90</span></a>
-</span><span id="L-91"><a href="#L-91"><span class="linenos">91</span></a>    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-</span><span id="L-92"><a href="#L-92"><span class="linenos">92</span></a>        <span class="nb">print</span><span class="p">(</span><span class="nb">enumerate</span><span class="p">)</span>
+</span><span id="L-81"><a href="#L-81"><span class="linenos">81</span></a>            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">boxes</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+</span><span id="L-82"><a href="#L-82"><span class="linenos">82</span></a>                <span class="n">output</span> <span class="o">=</span> <span class="n">draw_bounding_boxes</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">boxes</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">class_names</span><span class="p">,</span> <span class="n">probs</span><span class="p">);</span>
+</span><span id="L-83"><a href="#L-83"><span class="linenos">83</span></a>
+</span><span id="L-84"><a href="#L-84"><span class="linenos">84</span></a>            <span class="n">cv2</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="s1">&#39;MobileNet SSD Demo&#39;</span><span class="p">,</span> <span class="n">output</span><span class="p">)</span>
+</span><span id="L-85"><a href="#L-85"><span class="linenos">85</span></a>
+</span><span id="L-86"><a href="#L-86"><span class="linenos">86</span></a>            <span class="k">if</span> <span class="n">cv2</span><span class="o">.</span><span class="n">waitKey</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xFF</span> <span class="o">==</span> <span class="nb">ord</span><span class="p">(</span><span class="s1">&#39;q&#39;</span><span class="p">):</span>
+</span><span id="L-87"><a href="#L-87"><span class="linenos">87</span></a>                <span class="k">break</span>
+</span><span id="L-88"><a href="#L-88"><span class="linenos">88</span></a>
+</span><span id="L-89"><a href="#L-89"><span class="linenos">89</span></a>        <span class="n">cap</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
+</span><span id="L-90"><a href="#L-90"><span class="linenos">90</span></a>        <span class="n">cv2</span><span class="o">.</span><span class="n">destroyAllWindows</span><span class="p">()</span>
+</span><span id="L-91"><a href="#L-91"><span class="linenos">91</span></a>
+</span><span id="L-92"><a href="#L-92"><span class="linenos">92</span></a>    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+</span><span id="L-93"><a href="#L-93"><span class="linenos">93</span></a>        <span class="nb">print</span><span class="p">(</span><span class="nb">enumerate</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -227,18 +228,19 @@
 </span><span id="mobilenet_ssd_inference_demo-79"><a href="#mobilenet_ssd_inference_demo-79"><span class="linenos">79</span></a>            <span class="c1"># Draw bounding boxes onto the image</span>
 </span><span id="mobilenet_ssd_inference_demo-80"><a href="#mobilenet_ssd_inference_demo-80"><span class="linenos">80</span></a>            <span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">shape</span>
 </span><span id="mobilenet_ssd_inference_demo-81"><a href="#mobilenet_ssd_inference_demo-81"><span class="linenos">81</span></a>
-</span><span id="mobilenet_ssd_inference_demo-82"><a href="#mobilenet_ssd_inference_demo-82"><span class="linenos">82</span></a>            <span class="n">output</span> <span class="o">=</span> <span class="n">draw_bounding_boxes</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">boxes</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">class_names</span><span class="p">,</span> <span class="n">probs</span><span class="p">);</span>
-</span><span id="mobilenet_ssd_inference_demo-83"><a href="#mobilenet_ssd_inference_demo-83"><span class="linenos">83</span></a>
-</span><span id="mobilenet_ssd_inference_demo-84"><a href="#mobilenet_ssd_inference_demo-84"><span class="linenos">84</span></a>            <span class="n">cv2</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="s1">&#39;MobileNet SSD Demo&#39;</span><span class="p">,</span> <span class="n">output</span><span class="p">)</span>
-</span><span id="mobilenet_ssd_inference_demo-85"><a href="#mobilenet_ssd_inference_demo-85"><span class="linenos">85</span></a>
-</span><span id="mobilenet_ssd_inference_demo-86"><a href="#mobilenet_ssd_inference_demo-86"><span class="linenos">86</span></a>            <span class="k">if</span> <span class="n">cv2</span><span class="o">.</span><span class="n">waitKey</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xFF</span> <span class="o">==</span> <span class="nb">ord</span><span class="p">(</span><span class="s1">&#39;q&#39;</span><span class="p">):</span>
-</span><span id="mobilenet_ssd_inference_demo-87"><a href="#mobilenet_ssd_inference_demo-87"><span class="linenos">87</span></a>                <span class="k">break</span>
-</span><span id="mobilenet_ssd_inference_demo-88"><a href="#mobilenet_ssd_inference_demo-88"><span class="linenos">88</span></a>
-</span><span id="mobilenet_ssd_inference_demo-89"><a href="#mobilenet_ssd_inference_demo-89"><span class="linenos">89</span></a>        <span class="n">cap</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
-</span><span id="mobilenet_ssd_inference_demo-90"><a href="#mobilenet_ssd_inference_demo-90"><span class="linenos">90</span></a>        <span class="n">cv2</span><span class="o">.</span><span class="n">destroyAllWindows</span><span class="p">()</span>
-</span><span id="mobilenet_ssd_inference_demo-91"><a href="#mobilenet_ssd_inference_demo-91"><span class="linenos">91</span></a>
-</span><span id="mobilenet_ssd_inference_demo-92"><a href="#mobilenet_ssd_inference_demo-92"><span class="linenos">92</span></a>    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-</span><span id="mobilenet_ssd_inference_demo-93"><a href="#mobilenet_ssd_inference_demo-93"><span class="linenos">93</span></a>        <span class="nb">print</span><span class="p">(</span><span class="nb">enumerate</span><span class="p">)</span>
+</span><span id="mobilenet_ssd_inference_demo-82"><a href="#mobilenet_ssd_inference_demo-82"><span class="linenos">82</span></a>            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">boxes</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+</span><span id="mobilenet_ssd_inference_demo-83"><a href="#mobilenet_ssd_inference_demo-83"><span class="linenos">83</span></a>                <span class="n">output</span> <span class="o">=</span> <span class="n">draw_bounding_boxes</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">boxes</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">class_names</span><span class="p">,</span> <span class="n">probs</span><span class="p">);</span>
+</span><span id="mobilenet_ssd_inference_demo-84"><a href="#mobilenet_ssd_inference_demo-84"><span class="linenos">84</span></a>
+</span><span id="mobilenet_ssd_inference_demo-85"><a href="#mobilenet_ssd_inference_demo-85"><span class="linenos">85</span></a>            <span class="n">cv2</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="s1">&#39;MobileNet SSD Demo&#39;</span><span class="p">,</span> <span class="n">output</span><span class="p">)</span>
+</span><span id="mobilenet_ssd_inference_demo-86"><a href="#mobilenet_ssd_inference_demo-86"><span class="linenos">86</span></a>
+</span><span id="mobilenet_ssd_inference_demo-87"><a href="#mobilenet_ssd_inference_demo-87"><span class="linenos">87</span></a>            <span class="k">if</span> <span class="n">cv2</span><span class="o">.</span><span class="n">waitKey</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xFF</span> <span class="o">==</span> <span class="nb">ord</span><span class="p">(</span><span class="s1">&#39;q&#39;</span><span class="p">):</span>
+</span><span id="mobilenet_ssd_inference_demo-88"><a href="#mobilenet_ssd_inference_demo-88"><span class="linenos">88</span></a>                <span class="k">break</span>
+</span><span id="mobilenet_ssd_inference_demo-89"><a href="#mobilenet_ssd_inference_demo-89"><span class="linenos">89</span></a>
+</span><span id="mobilenet_ssd_inference_demo-90"><a href="#mobilenet_ssd_inference_demo-90"><span class="linenos">90</span></a>        <span class="n">cap</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
+</span><span id="mobilenet_ssd_inference_demo-91"><a href="#mobilenet_ssd_inference_demo-91"><span class="linenos">91</span></a>        <span class="n">cv2</span><span class="o">.</span><span class="n">destroyAllWindows</span><span class="p">()</span>
+</span><span id="mobilenet_ssd_inference_demo-92"><a href="#mobilenet_ssd_inference_demo-92"><span class="linenos">92</span></a>
+</span><span id="mobilenet_ssd_inference_demo-93"><a href="#mobilenet_ssd_inference_demo-93"><span class="linenos">93</span></a>    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+</span><span id="mobilenet_ssd_inference_demo-94"><a href="#mobilenet_ssd_inference_demo-94"><span class="linenos">94</span></a>        <span class="nb">print</span><span class="p">(</span><span class="nb">enumerate</span><span class="p">)</span>
 </span></pre></div>
 
 

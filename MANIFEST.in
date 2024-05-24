@@ -1,5 +1,6 @@
 include *.md
 include LICENSE
-graft docs
-graft examples
-graft tests
+prune docs
+prune examples
+prune notebooks
+prune tests

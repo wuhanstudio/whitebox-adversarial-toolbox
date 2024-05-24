@@ -3,22 +3,23 @@ requires = [
     "numpy>=1.18.0",
     "tqdm",
     "six",
-    "setuptools",
-    "torch",
+    "torch==1.11.0",
     "torchvision",
     "opencv-python",
     "scikit-image",
-    "tensorflow",
+    "tensorflow==2.4.0",
+    "keras==2.4.3",
+    "h5py==2.10.0",
     "matplotlib",
     "click",
     "progressbar",
-    "loguru"
+    "loguru",
 ]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "whitebox-adversarial-toolbox"
-version = "0.2.0"
+version = "0.2.1"
 authors = [
   { name="wuhanstudio", email="wuhanstudios@gmail.com" },
 ]
@@ -43,11 +44,13 @@ dependencies = [
     "tqdm",
     "six",
     "setuptools",
-    "torch",
+    "torch==1.11.0",
     "torchvision",
     "opencv-python",
     "scikit-image",
-    "tensorflow",
+    "tensorflow==2.4.0",
+    "keras==2.4.3",
+    "h5py==2.10.0",
     "matplotlib",
     "pandas",
     "click",
