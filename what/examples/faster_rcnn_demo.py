@@ -69,6 +69,7 @@ def frcnn_inference_demo():
         boxes[:, 2] = box_w / width
         boxes[:, 3] = box_h / height
 
+        output = orig_image
         if len(boxes) > 0:
             output = draw_bounding_boxes(orig_image,
                     boxes,

@@ -82,10 +82,11 @@ def yolox_inference_demo():
             image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
 
             # Draw bounding boxes onto the image
+            output = image
             if len(boxes) > 0:
                 output = draw_bounding_boxes(image, boxes, labels, model.class_names, probs);
 
-            cv2.imshow('YOLOX Demo', image)
+            cv2.imshow('YOLOX Demo', output)
 
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break

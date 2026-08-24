@@ -78,6 +78,7 @@ def mobilenet_ssd_inference_demo():
             # Draw bounding boxes onto the image
             height, width, _ = image.shape
 
+            output = image
             if len(boxes) > 0:
                 output = draw_bounding_boxes(image, boxes, labels, model.class_names, probs);
 
