@@ -84,5 +84,8 @@ class TOGAttack:
                 self.noise = np.clip(self.noise, -1.0, 1.0)
 
                 self.noise = proj_lp(self.noise, xi=8/255.0, p = np.inf)
+            else:
+                outputs = self.sess.run(self.model.output,
+                                         feed_dict={self.model.input: np.array([input_cv_image])})
 
             return input_cv_image, outputs
