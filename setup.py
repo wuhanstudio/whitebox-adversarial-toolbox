@@ -30,6 +30,7 @@ install_requires = [
     "tensorflow",
     "keras==2.4.3",
     "h5py==2.10.0",
+    "protobuf<3.20",
     "matplotlib",
     "pandas",
     "click",
