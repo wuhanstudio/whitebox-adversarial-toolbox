@@ -25,8 +25,8 @@ jobs:
 
       # ADJUST THIS: install all dependencies (including pdoc)
       - run: python3 -m pip install --upgrade pip
-      - run: python3 -m pip install pdoc pytest
-      - run: python3 -m pip install -e .
+      - run: python3 -m pip install -e ".[dev]"
+      - run: python3 -m pip install pytest pdoc
       # ADJUST THIS: build your documentation into docs/.
       # We use a custom build script for pdoc itself, ideally you just run `pdoc -o docs/ ...` here.
-      - run: pytest
+      - run: python3 -m pytest

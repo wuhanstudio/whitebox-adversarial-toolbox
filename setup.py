@@ -52,9 +52,18 @@ setuptools.setup(
     url="https://github.com/wuhanstudio/whitebox-adversarial-toolbox",
     license="MIT",
     install_requires=install_requires,
-    extra_require = {
-        "dev": [    "progressbar",
-        ]
+    extras_require = {
+        "dev": [
+            "pytest",
+            "pdoc",
+            "build",
+        ],
+        "test": [
+            "pytest",
+        ],
+        "docs": [
+            "pdoc",
+        ],
     },
     entry_points={
         'console_scripts': [
