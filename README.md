@@ -17,7 +17,8 @@ A Python Library for Deep Learning Security that focuses on Real-time White-box 
 
 Using `uv` (recomended)
 ```python
-uv sync --python 3.8
+uv init --python 3.8
+uv add whitebox-adversarial-toolbox
 uv run what example run 
 ```
 
@@ -72,6 +73,14 @@ Available models:
 [x] 11 : YOLOX Large                    Object Detection        YOLOX-L pretrained on MS COCO dataset.
 [x] 12 : YOLOX Medium                   Object Detection        YOLOX-M pretrained on MS COCO dataset.
 [x] 13 : YOLOX Small                    Object Detection        YOLOX-S pretrained on MS COCO dataset.
+```
+
+## For Developers
+
+```
+uv sync --python 3.8 --dev
+uv run python make.py
+uv build
 ```
 
 ## A Man-in-the-Middle Hardware Attack

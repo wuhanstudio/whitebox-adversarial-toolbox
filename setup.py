@@ -28,7 +28,8 @@ install_requires = [
     "opencv-python",
     "scikit-image",
     "tensorflow",
-    "tensorrt",
+    "keras==2.4.3",
+    "h5py==2.10.0",
     "matplotlib",
     "pandas",
     "click",
@@ -68,7 +69,6 @@ setuptools.setup(
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
-        "Programming Language :: Python :: 3.9",
         "Topic :: Scientific/Engineering :: Artificial Intelligence",
     ],
 )

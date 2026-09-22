@@ -1,19 +1,8 @@
 [build-system]
 requires = [
-    "numpy>=1.18.0",
-    "tqdm",
-    "six",
-    "torch<2.0",
-    "torchvision",
-    "opencv-python",
-    "scikit-image",
-    "tensorflow",
-    "keras==2.4.3",
-    "h5py==2.10.0",
-    "matplotlib",
-    "click",
-    "progressbar",
-    "loguru",
+  "setuptools",
+  "pytest",
+  "pdoc"
 ]
 build-backend = "setuptools.build_meta"
 
@@ -36,7 +25,6 @@ classifiers = [
     "Programming Language :: Python :: 3.6",
     "Programming Language :: Python :: 3.7",
     "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
     "Topic :: Scientific/Engineering :: Artificial Intelligence",
 ]
 dependencies = [
@@ -67,3 +55,10 @@ what = "what._main:main"
 [project.urls]
 "Homepage" = "https://github.com/wuhanstudio/whitebox-adversarial-toolbox"
 "Bug Tracker" = "https://github.com/wuhanstudio/whitebox-adversarial-toolbox/issues"
+
+[dependency-groups]
+dev = [
+    "pdoc>=0.4.1",
+    "pytest>=7.0.1",
+    "setuptools>=59.6.0",
+]
