@@ -3,7 +3,7 @@ requires = [
     "numpy>=1.18.0",
     "tqdm",
     "six",
-    "torch==1.11.0",
+    "torch<2.0",
     "torchvision",
     "opencv-python",
     "scikit-image",
