@@ -19,7 +19,7 @@ def get_version(rel_path):
     raise RuntimeError("Unable to find version string.")
 
 install_requires = [
-    "numpy>=1.18.0",
+    "numpy>=1.18.0,<1.20",
     "tqdm",
     "six",
     "setuptools",
