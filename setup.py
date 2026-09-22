@@ -23,7 +23,7 @@ install_requires = [
     "tqdm",
     "six",
     "setuptools",
-    "torch",
+    "torch<2.0",
     "torchvision",
     "opencv-python",
     "scikit-image",
@@ -34,6 +34,9 @@ install_requires = [
     "click",
     "progressbar",
     "loguru",
+    "psutil",
+    "pycocotools",
+    "tabulate",
 ]
 
 setuptools.setup(

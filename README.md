@@ -15,7 +15,15 @@ A Python Library for Deep Learning Security that focuses on Real-time White-box 
 
 ## Installation
 
+Using `uv` (recomended)
 ```python
+uv sync --python 3.8
+uv run what example run 
+```
+
+Using `pip`
+
+```
 pip install whitebox-adversarial-toolbox
 ```
 

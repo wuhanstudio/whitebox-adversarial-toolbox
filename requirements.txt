@@ -12,3 +12,5 @@ matplotlib
 pandas
 progressbar
 loguru
+pycocotools
+tabulate
