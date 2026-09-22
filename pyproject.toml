@@ -8,7 +8,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "whitebox-adversarial-toolbox"
-version = "0.2.3"
+version = "0.2.4"
 authors = [
   { name="wuhanstudio", email="wuhanstudios@gmail.com" },
 ]

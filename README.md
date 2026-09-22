@@ -79,8 +79,13 @@ Available models:
 
 ```
 uv sync --python 3.8 --dev
+
+<!-- Build documentations -->
 uv run python make.py
+
+<!-- Publish to pypi -->
 uv build
+uv publish
 ```
 
 ## A Man-in-the-Middle Hardware Attack
